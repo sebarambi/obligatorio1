@@ -1,17 +1,58 @@
 package org.example;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import java.util.Scanner;
+import org.example.view.HuespedView;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        Scanner scanner = new Scanner(System.in);
+        int option;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+        do {
+            System.out.println("========================================");
+            System.out.println("          Bienvenido al Hotel          ");
+            System.out.println("========================================");
+            System.out.println("1. Ingresar huéspedes");
+            System.out.println("2. Realizar una reserva");
+            System.out.println("3. Consultar reservas");
+            System.out.println("4. Cancelar una reserva");
+            System.out.println("5. Salir");
+            System.out.print("Seleccione una opción: ");
+
+            option = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (option) {
+                case 1:
+                    System.out.println("Ingresar huespedes...");
+                    HuespedView huespedView = new HuespedView();
+                    huespedView.insertHuesped();
+                    break;
+                case 2:
+                    System.out.println("Realizando una reserva...");
+                    // Aquí llamas a la función correspondiente para realizar una reserva
+                    break;
+                case 3:
+                    System.out.println("Consultando reservas...");
+                    // Aquí llamas a la función correspondiente para consultar reservas
+                    break;
+                case 4:
+                    System.out.println("Cancelando una reserva...");
+                    // Aquí llamas a la función correspondiente para cancelar una reserva
+                    break;
+                case 5:
+                    System.out.println("Gracias por utilizar el sistema. ¡Hasta luego!");
+                    break;
+                default:
+                    System.out.println("Opción no válida. Por favor, seleccione nuevamente.");
+                    break;
+            }
+
+            System.out.println();
+
+        } while (option != 5);
+
+        scanner.close();
     }
+
 }
