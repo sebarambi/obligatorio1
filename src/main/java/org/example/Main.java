@@ -24,7 +24,7 @@ public class Main {
 
             switch (option) {
                 case 1:
-                    System.out.println("Ingresar huespedes...");
+                    System.out.println("Ingresar huespedes.");
                     HuespedView huespedView = new HuespedView();
                     huespedView.insertHuesped();
                     break;

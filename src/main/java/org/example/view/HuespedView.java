@@ -9,6 +9,7 @@ public class HuespedView {
     private Scanner scanner = new Scanner(System.in);
     private HuespedController huespedController;
 
+
     public HuespedView() {
         this.huespedController = new HuespedController();
     }
@@ -17,7 +18,7 @@ public class HuespedView {
         System.out.println("Ingrese los datos del huésped a continuación:");
         System.out.print("Ingrese el ID del huésped: ");
         int idHuesped = scanner.nextInt();
-        scanner.nextLine(); // Limpiar el buffer
+        scanner.nextLine();
 
         System.out.print("Ingrese el nombre: ");
         String nombre = scanner.nextLine();
@@ -33,6 +34,10 @@ public class HuespedView {
 
         System.out.print("Ingrese el teléfono: ");
         String telefono = scanner.nextLine();
+
+        System.out.println("Seleccione el Pais:");
+
+
         Huesped huesped = new Huesped(idHuesped, nombre, aPaterno, aMaterno, numDocumento, telefono);
         boolean huespedInserted = this.huespedController.insertHuesped(huesped);
 

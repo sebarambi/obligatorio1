@@ -11,7 +11,6 @@ public class HuespedController {
     }
 
 
-
     public boolean insertHuesped(Huesped huesped) {
         return this.huespedDAO.insertHuesped(huesped);
     }
