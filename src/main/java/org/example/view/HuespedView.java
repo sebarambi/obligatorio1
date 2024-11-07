@@ -53,14 +53,12 @@ public class HuespedView {
                     break;
                 case 3:
                     modificarHuesped();
-
-
                     break;
                 case 4:
-                    //Aca va eliminar por ID
+                    eliminarHuesped();
                     break;
                 case 5:
-
+                    System.out.println("Gracias por usar la gestion de Huespedes.");
                     break;
                 default:
                     // Opción inválida
@@ -233,18 +231,6 @@ public class HuespedView {
                 huesped.setNumDocumento(nuevoNumDocumento);
             }
 
-            /*// Modificar fecha de nacimiento
-            System.out.println("Ingrese nueva fecha de nacimiento (formato YYYY-MM-DD, deje en blanco para no modificar): ");
-            String nuevaFechaNacimiento = scanner.nextLine();
-            if (!nuevaFechaNacimiento.isEmpty()) {
-                try {
-                    Date fecha = Date.valueOf(nuevaFechaNacimiento);  // Convierte el String a Date
-                    huesped.setFechaNacimiento(fecha);
-                } catch (IllegalArgumentException e) {
-                    System.out.println("Fecha inválida, no se modificó.");
-                }
-            }
-             */
 
             // Modificar teléfono
             System.out.println("Ingrese nuevo teléfono (deje en blanco para no modificar): ");
@@ -289,6 +275,40 @@ public class HuespedView {
             }
         } else {
             System.out.println("Huesped no encontrado.");
+        }
+    }
+
+    public void eliminarHuesped() {
+        // Listar todos los huéspedes registrados
+        listarHuespedes(todosLosHuespedes);
+
+        System.out.println("Ingrese el ID del Huésped que desea eliminar: ");
+        int idAEliminar = scanner.nextInt();
+
+        // Buscar el huésped por ID
+        Huesped huesped = huespedDAO.getHuespedById(idAEliminar);
+
+        // Si el huésped existe, proceder a eliminarlo
+        if (huesped != null) {
+            // Confirmar eliminación
+            System.out.println("Huésped encontrado: " + huesped.getNombre());
+            System.out.println("¿Está seguro de que desea eliminar este huésped? (s/n): ");
+            scanner.nextLine();  // Consumir el salto de línea pendiente
+            String confirmacion = scanner.nextLine();
+
+            if (confirmacion.equalsIgnoreCase("s")) {
+                // Eliminar huésped
+                boolean eliminado = huespedDAO.eliminarHuesped(idAEliminar);
+                if (eliminado) {
+                    System.out.println("Huésped eliminado exitosamente.");
+                } else {
+                    System.out.println("Ocurrió un error al eliminar al huésped.");
+                }
+            } else {
+                System.out.println("Eliminación cancelada.");
+            }
+        } else {
+            System.out.println("Huésped no encontrado.");
         }
     }
 

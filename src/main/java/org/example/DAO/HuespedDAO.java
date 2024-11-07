@@ -137,6 +137,13 @@ public class HuespedDAO {
                 huesped.getIdHuesped()  // El ID del huésped es necesario para la condición WHERE
         );
     }
+    public boolean eliminarHuesped(int idHuesped) {
+        String query = "DELETE FROM Huesped WHERE idHuesped = ?";
+
+        return connectionDAO.executeUpdate(query, idHuesped);
+    }
+
+
 
 
 }

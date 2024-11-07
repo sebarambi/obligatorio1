@@ -116,6 +116,7 @@ public class Huesped {
 
     //Metodos
     public void mostrarInformacion() {
+        System.out.println("ID: " + getIdHuesped());
         System.out.println("Nombre: " + getNombre());
         System.out.println("Apellido Paterno: " + getaPaterno());
         System.out.println("Apellido Materno: " + getaMaterno());
