@@ -52,9 +52,12 @@ public class HuespedView {
                     listarHuespedes(todosLosHuespedes);
                     break;
                 case 3:
-
+                    //Aca va modificar por ID
                     break;
                 case 4:
+                    //Aca va eliminar por ID
+                    break;
+                case 5:
 
                     break;
                 default:
@@ -62,7 +65,7 @@ public class HuespedView {
                     System.out.println("Opción no válida. Intenta de nuevo.");
                     break;
             }
-        } while (opcion != 4); // Repite el menú hasta que el usuario elija salir
+        } while (opcion != 5); // Repite el menú hasta que el usuario elija salir
 
         scanner.close();
     }

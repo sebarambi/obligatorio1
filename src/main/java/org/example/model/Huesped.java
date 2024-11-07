@@ -119,7 +119,6 @@ public class Huesped {
         System.out.println("Nombre: " + getNombre());
         System.out.println("Apellido Paterno: " + getaPaterno());
         System.out.println("Apellido Materno: " + getaMaterno());
-        System.out.println("Tipo documento: " + getTipoDocumento().getNombre());
         System.out.println("Numero de documento: " + getNumDocumento());
         System.out.println("Fecha de Nacimiento: " + getFechaNacimiento().toString());
         System.out.println("Telefono: " + getTelefono());
