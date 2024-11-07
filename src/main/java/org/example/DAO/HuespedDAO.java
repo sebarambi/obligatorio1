@@ -56,17 +56,17 @@ public class HuespedDAO {
                 Date fechaNacimiento = resultSet.getDate("fechaNacimiento");
                 String telefono = resultSet.getString("telefono");
 
-                // Crear el objeto Pais directamente con los datos de la consulta
+
                 int idPais = resultSet.getInt("idPais");
                 String nombrePais = resultSet.getString("nombrePais");
                 Pais pais = new Pais(idPais, nombrePais);
 
-                // Crear el objeto TipoDocumento directamente con los datos de la consulta
+
                 int idTipoDocumento = resultSet.getInt("idTipoDoc");
                 String descripcionTipoDoc = resultSet.getString("nombre");
                 TipoDocumento tipoDocumento = new TipoDocumento(idTipoDocumento, nombre);
 
-                // Crear el objeto Huesped con todos los datos y agregarlo a la lista
+
                 Huesped huesped = new Huesped(id, nombre, aPaterno, aMaterno, tipoDocumento, numDocumento, fechaNacimiento, telefono, pais);
                 huespedes.add(huesped);
             }
@@ -75,6 +75,67 @@ public class HuespedDAO {
         }
 
         return huespedes;
+    }
+
+    public Huesped getHuespedById(int idHuesped) {
+        String query = "SELECT h.idHuesped, h.nombre, h.aPaterno, h.aMaterno, h.numDocumento, " +
+                "h.fechaNacimiento, h.telefono, " +
+                "p.idPais, p.nombrePais, " +
+                "td.idTipoDoc, td.nombre " +
+                "FROM Huesped h " +
+                "JOIN Pais p ON h.idPais = p.idPais " +
+                "JOIN TipoDocumento td ON h.idTipoDoc = td.idTipoDoc " +
+                "WHERE h.idHuesped = ?";
+
+        Huesped huesped = null;
+
+        try {
+
+            ResultSet resultSet = connectionDAO.executeQuery(query, idHuesped);
+
+            // Si hay un resultado, lo asignamos al objeto huesped
+            if (resultSet.next()) {
+                String nombre = resultSet.getString("nombre");
+                String aPaterno = resultSet.getString("aPaterno");
+                String aMaterno = resultSet.getString("aMaterno");
+                String numDocumento = resultSet.getString("numDocumento");
+                Date fechaNacimiento = resultSet.getDate("fechaNacimiento");
+                String telefono = resultSet.getString("telefono");
+
+                int idPais = resultSet.getInt("idPais");
+                String nombrePais = resultSet.getString("nombrePais");
+                Pais pais = new Pais(idPais, nombrePais);
+
+                int idTipoDocumento = resultSet.getInt("idTipoDoc");
+                String descripcionTipoDoc = resultSet.getString("nombre");
+                TipoDocumento tipoDocumento = new TipoDocumento(idTipoDocumento, descripcionTipoDoc);
+
+                // Crear el objeto Huesped con los valores obtenidos
+                huesped = new Huesped(idHuesped, nombre, aPaterno, aMaterno, tipoDocumento, numDocumento, fechaNacimiento, telefono, pais);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return huesped;
+    }
+
+    public boolean modificarHuesped(Huesped huesped) {
+        String query = "UPDATE Huesped SET nombre = ?, aPaterno = ?, aMaterno = ?, " +
+                "idTipoDoc = ?, numDocumento = ?, fechaNacimiento = ?, telefono = ?, idPais = ? " +
+                "WHERE idHuesped = ?";
+
+        return connectionDAO.executeUpdate(query,
+                huesped.getNombre(),
+                huesped.getaPaterno(),
+                huesped.getaMaterno(),
+                huesped.getTipoDocumento().getIdTipoDoc(),
+                huesped.getNumDocumento(),
+                huesped.getFechaNacimiento(),
+                huesped.getTelefono(),
+                huesped.getPais().getId(),
+                huesped.getIdHuesped()  // El ID del huésped es necesario para la condición WHERE
+        );
     }
 
 

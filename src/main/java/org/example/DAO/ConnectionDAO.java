@@ -26,25 +26,30 @@ public class ConnectionDAO {
 
             return rowsAffected > 0;
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Ocurrió un problema al conectarse con la base de datos.");
+            //ex.printStackTrace();
         }
-
         return false;
     }
 
-    public ResultSet executeQuery(String query) {
+    public ResultSet executeQuery(String query, Object... params) {
+
+        ResultSet resultSet = null;
         try {
             Connection connection = getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
 
-            // Ejecución de la consulta
-            ResultSet resultSet = statement.executeQuery();
+            for (int i = 0; i < params.length; i++) {
+                statement.setObject(i + 1, params[i]);
+            }
+
+            resultSet = statement.executeQuery();
 
             return resultSet;
         } catch (SQLException ex) {
+            System.out.println("No se pudo obtener los datos.");
             ex.printStackTrace();
         }
-
-        return null;
+        return resultSet;
     }
 }

@@ -10,6 +10,9 @@ public class HuespedController {
 
     }
 
+    public Huesped getHuespedById(int idHuesped) {
+        return this.huespedDAO.getHuespedById(idHuesped);
+    }
 
     public boolean insertHuesped(Huesped huesped) {
         return this.huespedDAO.insertHuesped(huesped);

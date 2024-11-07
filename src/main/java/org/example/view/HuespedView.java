@@ -46,13 +46,15 @@ public class HuespedView {
 
             switch (opcion) {
                 case 1:
-                   insertHuesped();
+                    insertHuesped();
                     break;
                 case 2:
                     listarHuespedes(todosLosHuespedes);
                     break;
                 case 3:
-                    //Aca va modificar por ID
+                    modificarHuesped();
+
+
                     break;
                 case 4:
                     //Aca va eliminar por ID
@@ -70,6 +72,7 @@ public class HuespedView {
         scanner.close();
     }
 
+    //Metodos ---------------------------------------------------------------------------------------------------
 
     public void insertHuesped() {
         System.out.println("Ingrese los datos del huésped a continuación:");
@@ -153,7 +156,9 @@ public class HuespedView {
             System.out.println("Ocurrió un error al insertar el huésped.");
         }
     }
+
     public void listarHuespedes(List<Huesped> lista) {
+        System.out.println("Los huespedes que se encuentran registrados en el sistema son: ");
         for (Huesped huesped : lista) {
             System.out.println("-------------------------------------------------");
             huesped.mostrarInformacion();
@@ -161,4 +166,131 @@ public class HuespedView {
         }
 
     }
+
+    public void modificarHuesped() {
+        listarHuespedes(todosLosHuespedes);
+        System.out.println("Ingrese el ID del Huesped que desea modificar: ");
+        int idAModificar = scanner.nextInt();
+
+        Huesped huesped = huespedDAO.getHuespedById(idAModificar);
+
+        // Si el huésped existe, procedemos con la modificación
+        if (huesped != null) {
+            System.out.println("Huesped encontrado: " + huesped.getNombre());
+
+            // Modificar nombre
+            System.out.println("Ingrese nuevo nombre (deje en blanco para no modificar): ");
+            scanner.nextLine();  // Consumir salto de línea pendiente
+            String nuevoNombre = scanner.nextLine();
+            if (!nuevoNombre.isEmpty()) {
+                huesped.setNombre(nuevoNombre);
+            }
+
+            // Modificar apellido paterno
+            System.out.println("Ingrese nuevo apellido paterno (deje en blanco para no modificar): ");
+            String nuevoAPaterno = scanner.nextLine();
+            if (!nuevoAPaterno.isEmpty()) {
+                huesped.setaPaterno(nuevoAPaterno);
+            }
+
+            // Modificar apellido materno
+            System.out.println("Ingrese nuevo apellido materno (deje en blanco para no modificar): ");
+            String nuevoAMaterno = scanner.nextLine();
+            if (!nuevoAMaterno.isEmpty()) {
+                huesped.setaMaterno(nuevoAMaterno);
+            }
+
+            // Modificar tipo de documento
+            System.out.println("¿Desea modificar el tipo de documento? (S/N): ");
+            String respuestaTipoDoc = scanner.nextLine();
+            if (respuestaTipoDoc.equalsIgnoreCase("S")) {
+                System.out.println("Seleccione el nuevo tipo de documento:");
+                for (TipoDocumento tipo : tipoDocumentos) {
+                    System.out.println("ID: " + tipo.getIdTipoDoc() + ", Nombre: " + tipo.getNombre());
+                }
+                int idTipoSeleccionado = scanner.nextInt();
+                scanner.nextLine();  // Consumir salto de línea pendiente
+                TipoDocumento tipoSeleccionado = null;
+
+                for (TipoDocumento tipo : tipoDocumentos) {
+                    if (tipo.getIdTipoDoc() == idTipoSeleccionado) {
+                        tipoSeleccionado = tipo;
+                        break;
+                    }
+                }
+                if (tipoSeleccionado != null) {
+                    huesped.setTipoDocumento(tipoSeleccionado);
+                    System.out.println("Tipo de documento actualizado a: " + tipoSeleccionado.getNombre());
+                } else {
+                    System.out.println("ID no válido. No se encontró el tipo de documento.");
+                }
+            }
+
+            // Modificar número de documento
+            System.out.println("Ingrese nuevo número de documento (deje en blanco para no modificar): ");
+            String nuevoNumDocumento = scanner.nextLine();
+            if (!nuevoNumDocumento.isEmpty()) {
+                huesped.setNumDocumento(nuevoNumDocumento);
+            }
+
+            /*// Modificar fecha de nacimiento
+            System.out.println("Ingrese nueva fecha de nacimiento (formato YYYY-MM-DD, deje en blanco para no modificar): ");
+            String nuevaFechaNacimiento = scanner.nextLine();
+            if (!nuevaFechaNacimiento.isEmpty()) {
+                try {
+                    Date fecha = Date.valueOf(nuevaFechaNacimiento);  // Convierte el String a Date
+                    huesped.setFechaNacimiento(fecha);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Fecha inválida, no se modificó.");
+                }
+            }
+             */
+
+            // Modificar teléfono
+            System.out.println("Ingrese nuevo teléfono (deje en blanco para no modificar): ");
+            String nuevoTelefono = scanner.nextLine();
+            if (!nuevoTelefono.isEmpty()) {
+                huesped.setTelefono(nuevoTelefono);
+            }
+
+            // Modificar país
+            System.out.println("¿Desea modificar el país? (S/N): ");
+            String respuestaPais = scanner.nextLine();
+            if (respuestaPais.equalsIgnoreCase("S")) {
+                System.out.println("Seleccione el nuevo país:");
+                for (Pais pais : paises) {
+                    System.out.println("ID: " + pais.getId() + ", Nombre: " + pais.getName());
+                }
+                int idPaisSeleccionado = scanner.nextInt();
+                scanner.nextLine();  // Consumir salto de línea pendiente
+                Pais paisSeleccionado = null;
+
+                for (Pais pais : paises) {
+                    if (pais.getId() == idPaisSeleccionado) {
+                        paisSeleccionado = pais;
+                        break;
+                    }
+                }
+                if (paisSeleccionado != null) {
+                    huesped.setPais(paisSeleccionado);
+                    System.out.println("País actualizado a: " + paisSeleccionado.getName());
+                } else {
+                    System.out.println("ID no válido. No se encontró el país.");
+                }
+            }
+
+            // Una vez modificado el objeto, lo pasamos al DAO para actualizarlo en la base de datos
+            boolean success = huespedDAO.modificarHuesped(huesped);
+
+            if (success) {
+                System.out.println("Huesped modificado correctamente.");
+            } else {
+                System.out.println("Error al modificar el huésped.");
+            }
+        } else {
+            System.out.println("Huesped no encontrado.");
+        }
+    }
+
+
 }
