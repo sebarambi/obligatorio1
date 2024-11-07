@@ -22,6 +22,7 @@ public class HuespedView {
     List<Pais> paises = paisDAO.listarPaises();
     List<TipoDocumento> tipoDocumentos = tipoDocumentoDAO.listarTiposDocumento();
 
+
     public HuespedView() {
         this.huespedController = new HuespedController();
     }

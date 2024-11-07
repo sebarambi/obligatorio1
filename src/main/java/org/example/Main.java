@@ -24,13 +24,13 @@ public class Main {
 
             switch (option) {
                 case 1:
+                    System.out.println("Ingresar Hotel");
+
+                    break;
+                case 2:
                     System.out.println("Ingresar huespedes.");
                     HuespedView huespedView = new HuespedView();
                     huespedView.insertHuesped();
-                    break;
-                case 2:
-                    System.out.println("Realizando una reserva...");
-                    // Aquí llamas a la función correspondiente para realizar una reserva
                     break;
                 case 3:
                     System.out.println("Consultando reservas...");
