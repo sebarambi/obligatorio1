@@ -1,5 +1,6 @@
 package org.example.view;
 
+import org.example.DAO.HuespedDAO;
 import org.example.DAO.PaisDAO;
 import org.example.DAO.TipoDocumentoDAO;
 import org.example.controller.HuespedController;
@@ -9,6 +10,7 @@ import org.example.model.TipoDocumento;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -19,8 +21,10 @@ public class HuespedView {
 
     PaisDAO paisDAO = new PaisDAO();
     TipoDocumentoDAO tipoDocumentoDAO = new TipoDocumentoDAO();
+    HuespedDAO huespedDAO = new HuespedDAO();
     List<Pais> paises = paisDAO.listarPaises();
     List<TipoDocumento> tipoDocumentos = tipoDocumentoDAO.listarTiposDocumento();
+    List<Huesped> todosLosHuespedes = huespedDAO.listarHuespedes();
 
 
     public HuespedView() {
@@ -45,13 +49,7 @@ public class HuespedView {
                    insertHuesped();
                     break;
                 case 2:
-
-                    System.out.print("Ingresa el primer número: ");
-                    int num1 = scanner.nextInt();
-                    System.out.print("Ingresa el segundo número: ");
-                    int num2 = scanner.nextInt();
-                    int suma = num1 + num2;
-                    System.out.println("La suma es: " + suma);
+                    listarHuespedes(todosLosHuespedes);
                     break;
                 case 3:
 
@@ -151,5 +149,13 @@ public class HuespedView {
         } else {
             System.out.println("Ocurrió un error al insertar el huésped.");
         }
+    }
+    public void listarHuespedes(List<Huesped> lista) {
+        for (Huesped huesped : lista) {
+            System.out.println("-------------------------------------------------");
+            huesped.mostrarInformacion();
+            System.out.println("-------------------------------------------------");
+        }
+
     }
 }

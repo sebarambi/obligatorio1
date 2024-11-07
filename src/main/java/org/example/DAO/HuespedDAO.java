@@ -1,8 +1,11 @@
 package org.example.DAO;
 
 import org.example.model.Huesped;
+import org.example.model.Pais;
+import org.example.model.TipoDocumento;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,8 +32,16 @@ public class HuespedDAO {
                 huesped.getPais().getId()
         );
     }
+
     public List<Huesped> listarHuespedes() {
-        String query = "SELECT idHuesped, nombre, aPaterno, aMaterno, numDocumento, fechaNacimiento, telefono, idPais, idTipoDoc FROM Huesped;";
+        String query = "SELECT h.idHuesped, h.nombre, h.aPaterno, h.aMaterno, h.numDocumento, " +
+                "h.fechaNacimiento, h.telefono, " +
+                "p.idPais, p.nombrePais, " +
+                "td.idTipoDoc, td.nombre " +
+                "FROM Huesped h " +
+                "JOIN Pais p ON h.idPais = p.idPais " +
+                "JOIN TipoDocumento td ON h.idTipoDoc = td.idTipoDoc;";
+
         List<Huesped> huespedes = new ArrayList<>();
 
         try {
@@ -42,13 +53,21 @@ public class HuespedDAO {
                 String aPaterno = resultSet.getString("aPaterno");
                 String aMaterno = resultSet.getString("aMaterno");
                 String numDocumento = resultSet.getString("numDocumento");
-                Date fechaNacimiento = resultSet.getDate("fechaNacimiento"); // Obtenemos la fecha como Date
+                Date fechaNacimiento = resultSet.getDate("fechaNacimiento");
                 String telefono = resultSet.getString("telefono");
-                int idPais = resultSet.getInt("idPais");
-                int idTipoDocumento = resultSet.getInt("idTipoDoc");
 
-                // Creamos el objeto Huesped y lo agregamos a la lista
-                Huesped huesped = new Huesped(id, nombre, aPaterno, aMaterno, numDocumento, fechaNacimiento, telefono, idPais, idTipoDocumento);
+                // Crear el objeto Pais directamente con los datos de la consulta
+                int idPais = resultSet.getInt("idPais");
+                String nombrePais = resultSet.getString("nombrePais");
+                Pais pais = new Pais(idPais, nombrePais);
+
+                // Crear el objeto TipoDocumento directamente con los datos de la consulta
+                int idTipoDocumento = resultSet.getInt("idTipoDoc");
+                String descripcionTipoDoc = resultSet.getString("nombre");
+                TipoDocumento tipoDocumento = new TipoDocumento(idTipoDocumento, nombre);
+
+                // Crear el objeto Huesped con todos los datos y agregarlo a la lista
+                Huesped huesped = new Huesped(id, nombre, aPaterno, aMaterno, tipoDocumento, numDocumento, fechaNacimiento, telefono, pais);
                 huespedes.add(huesped);
             }
         } catch (SQLException ex) {
