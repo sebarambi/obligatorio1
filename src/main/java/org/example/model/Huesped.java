@@ -87,12 +87,18 @@ public class Huesped {
         this.pais = pais;
     }
 
-    public Huesped(int idHuesped, String nombre, String aPaterno, String aMaterno, String numDocumento, String telefono) {
+    public Huesped(int idHuesped, String nombre, String aPaterno, String aMaterno, TipoDocumento tipoDocumento, String numDocumento, Date fechaNacimiento, String telefono, Pais pais) {
         this.idHuesped = idHuesped;
         this.nombre = nombre;
         this.aPaterno = aPaterno;
         this.aMaterno = aMaterno;
+        this.tipoDocumento = tipoDocumento;
         this.numDocumento = numDocumento;
+        this.fechaNacimiento = fechaNacimiento;
         this.telefono = telefono;
+        this.pais = pais;
+    }
+
+    public Huesped() {
     }
 }

@@ -1,13 +1,20 @@
 package org.example.view;
 
+import org.example.DAO.PaisDAO;
 import org.example.controller.HuespedController;
 import org.example.model.Huesped;
+import org.example.model.Pais;
+import org.example.model.TipoDocumento;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class HuespedView {
     private Scanner scanner = new Scanner(System.in);
     private HuespedController huespedController;
+
+    PaisDAO paisDAO = new PaisDAO();
+    List<Pais> paises = paisDAO.listarPaises();
 
 
     public HuespedView() {
@@ -36,9 +43,12 @@ public class HuespedView {
         String telefono = scanner.nextLine();
 
         System.out.println("Seleccione el Pais:");
+        for (Pais pais : paises) {
+            System.out.println("ID: " + pais.getId() + ", Nombre: " + pais.getName());
+        }
 
 
-        Huesped huesped = new Huesped(idHuesped, nombre, aPaterno, aMaterno, numDocumento, telefono);
+        Huesped huesped = new Huesped ();
         boolean huespedInserted = this.huespedController.insertHuesped(huesped);
 
         if (huespedInserted) {
@@ -46,7 +56,6 @@ public class HuespedView {
         } else {
             System.out.println("Ocurrio un error al insertar el usuario");
         }
-
 
 
     }

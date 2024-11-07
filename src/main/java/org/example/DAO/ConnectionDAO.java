@@ -1,9 +1,6 @@
 package org.example.DAO;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class ConnectionDAO {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/obligatorio_database";
@@ -33,5 +30,21 @@ public class ConnectionDAO {
         }
 
         return false;
+    }
+
+    public ResultSet executeQuery(String query) {
+        try {
+            Connection connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            // Ejecución de la consulta
+            ResultSet resultSet = statement.executeQuery();
+
+            return resultSet;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return null;
     }
 }
