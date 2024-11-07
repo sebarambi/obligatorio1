@@ -87,6 +87,7 @@ public class Huesped {
         this.pais = pais;
     }
 
+    //Constructor
     public Huesped(int idHuesped, String nombre, String aPaterno, String aMaterno, TipoDocumento tipoDocumento, String numDocumento, Date fechaNacimiento, String telefono, Pais pais) {
         this.idHuesped = idHuesped;
         this.nombre = nombre;
@@ -100,5 +101,28 @@ public class Huesped {
     }
 
     public Huesped() {
+    }
+
+    public Huesped(int idHuesped, String nombre, String aPaterno, String aMaterno, TipoDocumento tipoDocumento, String numDocumento, String telefono, Pais pais) {
+        this.idHuesped = idHuesped;
+        this.nombre = nombre;
+        this.aPaterno = aPaterno;
+        this.aMaterno = aMaterno;
+        this.tipoDocumento = tipoDocumento;
+        this.numDocumento = numDocumento;
+        this.telefono = telefono;
+        this.pais = pais;
+    }
+
+    //Metodos
+    public void mostrarInformacion() {
+        System.out.println("Nombre: " + getNombre());
+        System.out.println("Apellido Paterno: " + getaPaterno());
+        System.out.println("Apellido Materno: " + getaMaterno());
+        System.out.println("Tipo documento: " + getTipoDocumento().getNombre());
+        System.out.println("Numero de documento: " + getNumDocumento());
+        System.out.println("Fecha de Nacimiento: " + getFechaNacimiento().toString());
+        System.out.println("Telefono: " + getTelefono());
+        System.out.println("Pais: " + getPais().getName());
     }
 }

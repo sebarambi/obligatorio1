@@ -10,15 +10,18 @@ public class HuespedDAO {
     }
 
     public boolean insertHuesped(Huesped huesped) {
-        String query = "INSERT INTO Huesped (idHuesped,nombre, aPaterno, aMaterno, numDocumento, telefono) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Huesped (idHuesped,nombre, aPaterno, aMaterno,idTipoDoc, numDocumento, fechaNacimiento, telefono , idPais) VALUES (?, ?, ?, ?, ?, ?,?,?,?)";
 
         return connectionDAO.executeUpdate(query,
                 huesped.getIdHuesped(),
                 huesped.getNombre(),
                 huesped.getaPaterno(),
                 huesped.getaMaterno(),
+                huesped.getTipoDocumento().getIdTipoDoc(),
                 huesped.getNumDocumento(),
-                huesped.getTelefono()
+                huesped.getFechaNacimiento(),
+                huesped.getTelefono(),
+                huesped.getPais().getId()
         );
     }
 
