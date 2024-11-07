@@ -30,7 +30,7 @@ public class Main {
                 case 2:
                     System.out.println("Ingresar huespedes.");
                     HuespedView huespedView = new HuespedView();
-                    huespedView.insertHuesped();
+                    huespedView.menuHuesped();
                     break;
                 case 3:
                     System.out.println("Consultando reservas...");

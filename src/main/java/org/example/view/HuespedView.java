@@ -27,6 +27,49 @@ public class HuespedView {
         this.huespedController = new HuespedController();
     }
 
+    public void menuHuesped() {
+        int opcion;
+
+        do {
+            System.out.println("===== MENU DE HUESPEDES =====");
+            System.out.println("Opción 1: Insertar Huespedes");
+            System.out.println("Opción 2: Ver todos los Huespedes");
+            System.out.println("Opción 3: Modificar Huesped por ID");
+            System.out.println("Opción 4: Eliminar Huesped por ID");
+            System.out.println("Salir");
+            System.out.print("Selecciona una opción: ");
+            opcion = scanner.nextInt();
+
+            switch (opcion) {
+                case 1:
+                   insertHuesped();
+                    break;
+                case 2:
+
+                    System.out.print("Ingresa el primer número: ");
+                    int num1 = scanner.nextInt();
+                    System.out.print("Ingresa el segundo número: ");
+                    int num2 = scanner.nextInt();
+                    int suma = num1 + num2;
+                    System.out.println("La suma es: " + suma);
+                    break;
+                case 3:
+
+                    break;
+                case 4:
+
+                    break;
+                default:
+                    // Opción inválida
+                    System.out.println("Opción no válida. Intenta de nuevo.");
+                    break;
+            }
+        } while (opcion != 4); // Repite el menú hasta que el usuario elija salir
+
+        scanner.close();
+    }
+
+
     public void insertHuesped() {
         System.out.println("Ingrese los datos del huésped a continuación:");
         System.out.println("Ingrese el ID del huésped: ");
