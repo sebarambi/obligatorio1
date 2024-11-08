@@ -14,4 +14,5 @@ public class HotelController {
     public boolean insertHotel(Hotel hotel) {
         return this.hotelDAO.insertHotel(hotel);
     }
+
 }

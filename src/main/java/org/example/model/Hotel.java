@@ -1,5 +1,6 @@
 package org.example.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Hotel {
@@ -53,8 +54,12 @@ public class Hotel {
     }
 
     public List<Habitacion> getHabitaciones() {
+        if (habitaciones == null) {
+            return new ArrayList<>();
+        }
         return habitaciones;
     }
+
 
     public void setHabitaciones(List<Habitacion> habitaciones) {
         this.habitaciones = habitaciones;
@@ -85,14 +90,21 @@ public class Hotel {
         this.habitaciones.add(habitacion);
     }
 
-    public String mostrarInformacion() {
-        return "Hotel{" +
-                "ID=" + idHotel +
-                ", Nombre='" + nombreHotel + '\'' +
-                ", País=" + pais.getName() +
-                ", Ciudad=" + ciudad.getNombreCiudad() +
-                ", Estrellas=" + cantidadEstrellas +
-                ", Dirección='" + direccion + '\'' +
-                '}';
+    public void mostrarInformacion() {
+        System.out.println("ID: " + getIdHotel());
+        System.out.println("Nombre: " + getNombreHotel());
+        System.out.println("Pais: " + getPais().getName());
+        System.out.println("Ciudad: " + getCiudad().getNombreCiudad());
+        System.out.println("Cantidad de estrellas: " + getCantidadEstrellas());
+        System.out.println("Direccion: " + getDireccion());
+        if (getHabitaciones().isEmpty()) {
+            System.out.println("El hotel todavia no cuenta con habitaciones cargadas");
+        } else {
+            System.out.println("Las habitaciones del hotel son: ");
+            for (Habitacion habitacion : getHabitaciones()) {
+                habitacion.mostrarInformacion();
+            }
+        }
     }
 }
+

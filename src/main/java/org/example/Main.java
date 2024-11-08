@@ -1,6 +1,9 @@
 package org.example;
 
 import java.util.Scanner;
+
+import org.example.model.Hotel;
+import org.example.view.HotelView;
 import org.example.view.HuespedView;
 
 public class Main {
@@ -24,8 +27,8 @@ public class Main {
 
             switch (option) {
                 case 1:
-                    System.out.println("Ingresar Hotel");
-
+                    HotelView hotelView = new HotelView();
+                    hotelView.menuHotel();
                     break;
                 case 2:
                     HuespedView huespedView = new HuespedView();
