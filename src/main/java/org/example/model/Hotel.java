@@ -79,4 +79,20 @@ public class Hotel {
         this.direccion = direccion;
         habitaciones = null;
     }
+
+
+    public void agregarHabitacion(Habitacion habitacion) {
+        this.habitaciones.add(habitacion);
+    }
+
+    public String mostrarInformacion() {
+        return "Hotel{" +
+                "ID=" + idHotel +
+                ", Nombre='" + nombreHotel + '\'' +
+                ", País=" + pais.getName() +
+                ", Ciudad=" + ciudad.getNombreCiudad() +
+                ", Estrellas=" + cantidadEstrellas +
+                ", Dirección='" + direccion + '\'' +
+                '}';
+    }
 }

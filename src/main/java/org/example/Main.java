@@ -12,7 +12,7 @@ public class Main {
             System.out.println("========================================");
             System.out.println("          Bienvenido al Hotel          ");
             System.out.println("========================================");
-            System.out.println("1. Ingresar huéspedes");
+            System.out.println("1. Administracion de Hoteles");
             System.out.println("2. Administracion de Huespedes");
             System.out.println("3. Consultar reservas");
             System.out.println("4. Cancelar una reserva");
