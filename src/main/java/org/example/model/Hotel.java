@@ -85,6 +85,16 @@ public class Hotel {
         habitaciones = null;
     }
 
+    public Hotel(int idHotel, String nombreHotel, Pais pais, Ciudad ciudad, int cantidadEstrellas, String direccion, List<Habitacion> habitaciones) {
+        this.idHotel = idHotel;
+        this.nombreHotel = nombreHotel;
+        this.pais = pais;
+        this.ciudad = ciudad;
+        this.cantidadEstrellas = cantidadEstrellas;
+        this.direccion = direccion;
+        this.habitaciones = habitaciones;
+    }
+
 
     public void agregarHabitacion(Habitacion habitacion) {
         this.habitaciones.add(habitacion);
