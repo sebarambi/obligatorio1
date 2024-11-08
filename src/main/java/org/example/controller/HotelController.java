@@ -15,4 +15,5 @@ public class HotelController {
         return this.hotelDAO.insertHotel(hotel);
     }
 
+
 }

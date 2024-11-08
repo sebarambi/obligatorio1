@@ -34,7 +34,7 @@ public class HotelView {
         do {
             System.out.println("\n--- Menú de Gestión de Hoteles ---");
             System.out.println("1. Crear nuevo hotel");
-            System.out.println("2. Listar hoteles");
+            System.out.println("2. Listar hoteles existentes");
             System.out.println("3. Actualizar hotel");
             System.out.println("4. Eliminar hotel");
             System.out.println("5. Salir");
@@ -53,7 +53,7 @@ public class HotelView {
                     break;
 
                 case 3:
-                    //updateHotel();
+                    modificarHotel();
                     break;
 
                 case 4:
@@ -152,5 +152,105 @@ public class HotelView {
         }
 
     }
+    public void modificarHotel() {
+        listarHoteles(todosLosHoteles);
+        System.out.println("Ingrese el ID del Hotel que desea modificar: ");
+        int idAModificar = scanner.nextInt();
+
+        Hotel hotel = hotelDAO.getHotelById(idAModificar);
+
+        // Si el hotel existe, procedemos con la modificación
+        if (hotel != null) {
+            System.out.println("Hotel encontrado: " + hotel.getNombreHotel());
+
+            // Modificar nombre del hotel
+            System.out.println("Ingrese nuevo nombre del hotel (deje en blanco para no modificar): ");
+            scanner.nextLine();  // Consumir salto de línea pendiente
+            String nuevoNombre = scanner.nextLine();
+            if (!nuevoNombre.isEmpty()) {
+                hotel.setNombreHotel(nuevoNombre);
+            }
+
+            // Modificar país
+            System.out.println("¿Desea modificar el país? (S/N): ");
+            String respuestaPais = scanner.nextLine();
+            if (respuestaPais.equalsIgnoreCase("S")) {
+                System.out.println("Seleccione el nuevo país:");
+                for (Pais pais : paises) {
+                    System.out.println("ID: " + pais.getId() + ", Nombre: " + pais.getName());
+                }
+                int idPaisSeleccionado = scanner.nextInt();
+                scanner.nextLine();  // Consumir salto de línea pendiente
+                Pais paisSeleccionado = null;
+
+                for (Pais pais : paises) {
+                    if (pais.getId() == idPaisSeleccionado) {
+                        paisSeleccionado = pais;
+                        break;
+                    }
+                }
+                if (paisSeleccionado != null) {
+                    hotel.setPais(paisSeleccionado);
+                    System.out.println("País actualizado a: " + paisSeleccionado.getName());
+                } else {
+                    System.out.println("ID no válido. No se encontró el país.");
+                }
+            }
+
+            // Modificar ciudad
+            System.out.println("¿Desea modificar la ciudad? (S/N): ");
+            String respuestaCiudad = scanner.nextLine();
+            if (respuestaCiudad.equalsIgnoreCase("S")) {
+                System.out.println("Seleccione la nueva ciudad:");
+                List<Ciudad> ciudades = ciudadDAO.listarCiudadesPorIdPais(hotel.getPais().getId());
+                for (Ciudad ciudad : ciudades) {
+                    System.out.println("ID: " + ciudad.getIdCiudad() + ", Nombre: " + ciudad.getNombreCiudad());
+                }
+                int idCiudadSeleccionada = scanner.nextInt();
+                scanner.nextLine();  // Consumir salto de línea pendiente
+                Ciudad ciudadSeleccionada = null;
+
+                for (Ciudad ciudad : ciudades) {
+                    if (ciudad.getIdCiudad() == idCiudadSeleccionada) {
+                        ciudadSeleccionada = ciudad;
+                        break;
+                    }
+                }
+                if (ciudadSeleccionada != null) {
+                    hotel.setCiudad(ciudadSeleccionada);
+                    System.out.println("Ciudad actualizada a: " + ciudadSeleccionada.getNombreCiudad());
+                } else {
+                    System.out.println("ID no válido. No se encontró la ciudad.");
+                }
+            }
+
+            // Modificar cantidad de estrellas
+            System.out.println("Ingrese nueva cantidad de estrellas (deje en blanco para no modificar): ");
+            String estrellasInput = scanner.nextLine();
+            if (!estrellasInput.isEmpty()) {
+                int nuevaCantidadEstrellas = Integer.parseInt(estrellasInput);
+                hotel.setCantidadEstrellas(nuevaCantidadEstrellas);
+            }
+
+            // Modificar dirección
+            System.out.println("Ingrese nueva dirección (deje en blanco para no modificar): ");
+            String nuevaDireccion = scanner.nextLine();
+            if (!nuevaDireccion.isEmpty()) {
+                hotel.setDireccion(nuevaDireccion);
+            }
+
+            // Una vez modificado el objeto, lo pasamos al DAO para actualizarlo en la base de datos
+            boolean success = hotelDAO.modificarHotel(hotel);
+
+            if (success) {
+                System.out.println("Hotel modificado correctamente.");
+            } else {
+                System.out.println("Error al modificar el hotel.");
+            }
+        } else {
+            System.out.println("Hotel no encontrado.");
+        }
+    }
+
 
 }

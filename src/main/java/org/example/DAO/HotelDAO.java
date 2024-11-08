@@ -72,5 +72,58 @@ public class HotelDAO {
         return hoteles;
     }
 
+    public Hotel getHotelById(int idHotel) {
+        String query = "SELECT h.idHotel, h.nombreHotel, h.cantidadEstrellas, h.direccion, " +
+                "p.idPais, p.nombrePais, " +
+                "c.idCiudad, c.nombreCiudad " +
+                "FROM Hotel h " +
+                "JOIN Pais p ON h.idPais = p.idPais " +
+                "JOIN Ciudad c ON h.idCiudad = c.idCiudad " +
+                "WHERE h.idHotel = ?";
+
+        Hotel hotel = null;
+
+        try {
+            ResultSet resultSet = connectionDAO.executeQuery(query, idHotel);
+
+            // Si hay un resultado, lo asignamos al objeto hotel
+            if (resultSet.next()) {
+                String nombreHotel = resultSet.getString("nombreHotel");
+                int cantidadEstrellas = resultSet.getInt("cantidadEstrellas");
+                String direccion = resultSet.getString("direccion");
+
+                int idPais = resultSet.getInt("idPais");
+                String nombrePais = resultSet.getString("nombrePais");
+                Pais pais = new Pais(idPais, nombrePais);
+
+                int idCiudad = resultSet.getInt("idCiudad");
+                String nombreCiudad = resultSet.getString("nombreCiudad");
+                Ciudad ciudad = new Ciudad(idCiudad, nombreCiudad);
+
+                // Crear el objeto Hotel con los valores obtenidos
+                hotel = new Hotel(idHotel, nombreHotel, pais, ciudad, cantidadEstrellas, direccion);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return hotel;
+    }
+    public boolean modificarHotel(Hotel hotel) {
+        String query = "UPDATE Hotel SET nombreHotel = ?, idPais = ?, idCiudad = ?, " +
+                "cantidadEstrellas = ?, direccion = ? " +
+                "WHERE idHotel = ?";
+
+        return connectionDAO.executeUpdate(query,
+                hotel.getNombreHotel(),
+                hotel.getPais().getId(),
+                hotel.getCiudad().getIdCiudad(),
+                hotel.getCantidadEstrellas(),
+                hotel.getDireccion(),
+                hotel.getIdHotel()  // El ID del hotel es necesario para la condición WHERE
+        );
+    }
+
+
 
 }
