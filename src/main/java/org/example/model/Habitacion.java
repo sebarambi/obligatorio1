@@ -8,10 +8,19 @@ public class Habitacion {
     private TipoHabitacion tipoHabitacion;
     private boolean aireAcondicionado;
     private boolean balcon;
+    private Hotel hotel;
 
     //Getters and Setters
     public int getIdHabitacion() {
         return idHabitacion;
+    }
+
+    public Hotel getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
     }
 
     public void setIdHabitacion(int idHabitacion) {
@@ -67,7 +76,8 @@ public class Habitacion {
     }
     //Constructor
 
-    public Habitacion(int idHabitacion, int capacidadCamas, boolean ocupada, boolean camaDoble, TipoHabitacion tipoHabitacion, boolean aireAcondicionado, boolean balcon) {
+
+    public Habitacion(int idHabitacion, int capacidadCamas, boolean ocupada, boolean camaDoble, TipoHabitacion tipoHabitacion, boolean aireAcondicionado, boolean balcon, Hotel hotel) {
         this.idHabitacion = idHabitacion;
         this.capacidadCamas = capacidadCamas;
         this.ocupada = ocupada;
@@ -75,6 +85,7 @@ public class Habitacion {
         this.tipoHabitacion = tipoHabitacion;
         this.aireAcondicionado = aireAcondicionado;
         this.balcon = balcon;
+        this.hotel = hotel;
     }
 
     //Metodos

@@ -95,6 +95,10 @@ public class Hotel {
         this.habitaciones = habitaciones;
     }
 
+    public Hotel(int idHotel, String nombreHotel) {
+        this.idHotel = idHotel;
+        this.nombreHotel = nombreHotel;
+    }
 
     public void agregarHabitacion(Habitacion habitacion) {
         this.habitaciones.add(habitacion);
@@ -107,12 +111,16 @@ public class Hotel {
         System.out.println("Ciudad: " + getCiudad().getNombreCiudad());
         System.out.println("Cantidad de estrellas: " + getCantidadEstrellas());
         System.out.println("Direccion: " + getDireccion());
+        System.out.println();
         if (getHabitaciones().isEmpty()) {
             System.out.println("El hotel todavia no cuenta con habitaciones cargadas");
         } else {
             System.out.println("Las habitaciones del hotel son: ");
             for (Habitacion habitacion : getHabitaciones()) {
+                System.out.println("---------------------------------------------------------------------");
                 habitacion.mostrarInformacion();
+                System.out.println("---------------------------------------------------------------------");
+
             }
         }
     }

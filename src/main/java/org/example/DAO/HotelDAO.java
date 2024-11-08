@@ -1,6 +1,7 @@
 package org.example.DAO;
 
 import org.example.model.Ciudad;
+import org.example.model.Habitacion;
 import org.example.model.Hotel;
 import org.example.model.Pais;
 
@@ -58,8 +59,10 @@ public class HotelDAO {
                 String nombreCiudad = resultSet.getString("nombreCiudad");
                 Ciudad ciudad = new Ciudad(idCiudad, nombreCiudad);
 
-                // Crear el objeto Hotel y añadirlo a la lista
-                Hotel hotel = new Hotel(idHotel, nombreHotel, pais, ciudad, cantidadEstrellas, direccion);
+                // Crear el objeto Hotel sin las habitaciones
+                HabitacionDAO habitacionDAO = new HabitacionDAO();
+                List<Habitacion> listaHabitacionPorId = habitacionDAO.listarHabitacionesPorIdHotel(idHotel);
+                Hotel hotel = new Hotel(idHotel, nombreHotel, pais, ciudad, cantidadEstrellas, direccion ,listaHabitacionPorId);
                 hoteles.add(hotel);
             }
         } catch (SQLException ex) {
@@ -68,5 +71,6 @@ public class HotelDAO {
 
         return hoteles;
     }
+
 
 }
