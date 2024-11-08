@@ -1,11 +1,13 @@
 package org.example.view;
 
 import org.example.DAO.CiudadDAO;
+import org.example.DAO.HabitacionDAO;
 import org.example.DAO.HotelDAO;
 import org.example.DAO.PaisDAO;
 import org.example.controller.HotelController;
 
 import org.example.model.Ciudad;
+import org.example.model.Habitacion;
 import org.example.model.Hotel;
 
 import org.example.model.Pais;
@@ -23,6 +25,7 @@ public class HotelView {
     CiudadDAO ciudadDAO = new CiudadDAO();
     HotelDAO hotelDAO = new HotelDAO();
     List<Hotel> todosLosHoteles = hotelDAO.listarHoteles();
+    HabitacionDAO habitacionDAO = new HabitacionDAO();
 
     public HotelView() {
         this.hotelController = new HotelController();
@@ -57,7 +60,7 @@ public class HotelView {
                     break;
 
                 case 4:
-                    //deleteHotel();
+                    eliminarHotel();
                     break;
 
                 case 5:
@@ -143,6 +146,7 @@ public class HotelView {
             System.out.println("Ocurrió un error al insertar el hotel.");
         }
     }
+
     public void listarHoteles(List<Hotel> lista) {
         System.out.println("Los huespedes que se encuentran registrados en el sistema son: ");
         for (Hotel hotel : lista) {
@@ -152,6 +156,7 @@ public class HotelView {
         }
 
     }
+
     public void modificarHotel() {
         listarHoteles(todosLosHoteles);
         System.out.println("Ingrese el ID del Hotel que desea modificar: ");
@@ -252,5 +257,41 @@ public class HotelView {
         }
     }
 
+    public void eliminarHotel() {
+        // Listar todos los hoteles registrados
+        listarHoteles(todosLosHoteles);
 
+        System.out.println("Ingrese el ID del Hotel que desea eliminar: ");
+        int idAEliminar = scanner.nextInt();
+
+        // Buscar el hotel por ID
+        Hotel hotel = hotelDAO.getHotelById(idAEliminar);
+
+        // Si el hotel existe, proceder a eliminarlo
+        if (hotel != null) {
+            // Confirmar eliminación
+            System.out.println("Hotel encontrado: " + hotel.getNombreHotel());
+            System.out.println("¿Está seguro de que desea eliminar este hotel? (s/n): ");
+            scanner.nextLine();  // Consumir el salto de línea pendiente
+            String confirmacion = scanner.nextLine();
+
+            if (confirmacion.equalsIgnoreCase("s")) {
+                // Eliminar hotel
+                List<Habitacion> habitacionesHotelAEliminar = habitacionDAO.listarHabitacionesPorIdHotel(hotel.getIdHotel());
+                if (habitacionesHotelAEliminar.isEmpty()) {
+                    boolean eliminado = hotelDAO.eliminarHotel(idAEliminar);
+                    if (eliminado) {
+                        System.out.println("Hotel eliminado exitosamente.");
+                    } else {
+                        System.out.println("Ocurrió un error al eliminar el hotel.");
+                    }
+                } else {
+                    System.out.println("Eliminación cancelada. El hotel no debe tener habitaciones asignadas para ser eliminado");
+                }
+            } else {
+                System.out.println("Hotel no encontrado.");
+            }
+        }
+
+    }
 }

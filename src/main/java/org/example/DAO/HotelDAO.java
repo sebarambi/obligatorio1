@@ -123,6 +123,12 @@ public class HotelDAO {
                 hotel.getIdHotel()  // El ID del hotel es necesario para la condición WHERE
         );
     }
+    public boolean eliminarHotel(int idHotel) {
+        String query = "DELETE FROM Hotel WHERE idHotel = ?";
+
+        return connectionDAO.executeUpdate(query, idHotel);
+    }
+
 
 
 
