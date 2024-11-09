@@ -162,7 +162,7 @@ public class HotelView {
         System.out.println("Ingrese el ID del Hotel que desea modificar: ");
         int idAModificar = scanner.nextInt();
 
-        Hotel hotel = hotelDAO.getHotelById(idAModificar);
+        Hotel hotel = hotelController.getHotelById(idAModificar);
 
         // Si el hotel existe, procedemos con la modificación
         if (hotel != null) {
@@ -245,7 +245,7 @@ public class HotelView {
             }
 
             // Una vez modificado el objeto, lo pasamos al DAO para actualizarlo en la base de datos
-            boolean success = hotelDAO.modificarHotel(hotel);
+            boolean success = hotelController.modificarHotel(hotel);
 
             if (success) {
                 System.out.println("Hotel modificado correctamente.");
