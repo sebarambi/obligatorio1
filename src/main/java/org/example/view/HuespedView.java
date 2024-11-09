@@ -170,7 +170,7 @@ public class HuespedView {
         System.out.println("Ingrese el ID del Huesped que desea modificar: ");
         int idAModificar = scanner.nextInt();
 
-        Huesped huesped = huespedDAO.getHuespedById(idAModificar);
+        Huesped huesped = huespedController.getHuespedById(idAModificar);
 
         // Si el huésped existe, procedemos con la modificación
         if (huesped != null) {
@@ -286,7 +286,7 @@ public class HuespedView {
         int idAEliminar = scanner.nextInt();
 
         // Buscar el huésped por ID
-        Huesped huesped = huespedDAO.getHuespedById(idAEliminar);
+        Huesped huesped = huespedController.getHuespedById(idAEliminar);
 
         // Si el huésped existe, proceder a eliminarlo
         if (huesped != null) {
@@ -298,7 +298,7 @@ public class HuespedView {
 
             if (confirmacion.equalsIgnoreCase("s")) {
                 // Eliminar huésped
-                boolean eliminado = huespedDAO.eliminarHuesped(idAEliminar);
+                boolean eliminado = huespedController.eliminarHuesped(idAEliminar);
                 if (eliminado) {
                     System.out.println("Huésped eliminado exitosamente.");
                 } else {
