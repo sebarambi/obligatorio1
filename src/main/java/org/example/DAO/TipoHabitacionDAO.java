@@ -1,9 +1,12 @@
 package org.example.DAO;
 
+import org.example.model.Tarifa;
 import org.example.model.TipoHabitacion;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TipoHabitacionDAO {
     private ConnectionDAO connectionDAO;
@@ -35,4 +38,38 @@ public class TipoHabitacionDAO {
 
         return tipoHabitacion;
     }
+
+    public List<TipoHabitacion> listarTipoHabitaciones() {
+        String query = "SELECT th.idTipoHab, th.descripcion, t.idTarifa, t.monto " +
+                "FROM tipohabitacion th " +
+                "JOIN tarifa t ON th.idTarifa = t.idTarifa;";
+
+        List<TipoHabitacion> tipoHabitaciones = new ArrayList<>();
+
+        try {
+            ResultSet resultSet = connectionDAO.executeQuery(query);
+
+            while (resultSet.next()) {
+                // Recuperar datos de TipoHabitacion
+                int idTipoHabitacion = resultSet.getInt("idTipoHab");
+                String descripcion = resultSet.getString("descripcion");
+
+                // Recuperar datos de Tarifa
+                int idTarifa = resultSet.getInt("idTarifa");
+                int monto = resultSet.getInt("monto");
+
+                // Crear el objeto Tarifa
+                Tarifa tarifa = new Tarifa(idTarifa, monto);
+
+                // Crear el objeto TipoHabitacion y asignar la tarifa
+                TipoHabitacion tipoHabitacion = new TipoHabitacion(idTipoHabitacion, descripcion, tarifa);
+                tipoHabitaciones.add(tipoHabitacion);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return tipoHabitaciones;
+    }
+
 }

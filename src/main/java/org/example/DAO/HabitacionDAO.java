@@ -1,9 +1,6 @@
 package org.example.DAO;
 
-import org.example.model.Habitacion;
-import org.example.model.Hotel;
-import org.example.model.Tarifa;
-import org.example.model.TipoHabitacion;
+import org.example.model.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,6 +12,21 @@ public class HabitacionDAO {
 
     public HabitacionDAO() {
         this.connectionDAO = new ConnectionDAO();
+    }
+
+    public boolean insertHabitacion(Habitacion habitacion) {
+        String query = "INSERT INTO Habitacion (idHabitacion, capacidadCamas, ocupada, camaDoble, idTipoHab, aireAcondicionado, balcon, idHotel) VALUES (?,?,?,?,?,?,?,?)";
+
+        return connectionDAO.executeUpdate(query,
+                habitacion.getIdHabitacion(),
+                habitacion.getCapacidadCamas(),
+                habitacion.isOcupada(),
+                habitacion.isCamaDoble(),
+                habitacion.getTipoHabitacion().getIdTipoHabitacion(),
+                habitacion.isAireAcondicionado(),
+                habitacion.isBalcon(),
+                habitacion.getHotel().getIdHotel()
+        );
     }
 
     public List<Habitacion> listarHabitacionesPorIdHotel(int idHotel) {

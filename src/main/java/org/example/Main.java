@@ -3,6 +3,7 @@ package org.example;
 import java.util.Scanner;
 
 import org.example.model.Hotel;
+import org.example.view.HabitacionView;
 import org.example.view.HotelView;
 import org.example.view.HuespedView;
 
@@ -17,7 +18,7 @@ public class Main {
             System.out.println("========================================");
             System.out.println("1. Administracion de Hoteles");
             System.out.println("2. Administracion de Huespedes");
-            System.out.println("3. Consultar reservas");
+            System.out.println("3. Administracion de Habitaciones");
             System.out.println("4. Cancelar una reserva");
             System.out.println("5. Salir");
             System.out.print("Seleccione una opción: ");
@@ -35,8 +36,8 @@ public class Main {
                     huespedView.menuHuesped();
                     break;
                 case 3:
-                    System.out.println("Consultando reservas...");
-                    // Aquí llamas a la función correspondiente para consultar reservas
+                    HabitacionView habitacionView = new HabitacionView();
+                    habitacionView.menuHabitacion();
                     break;
                 case 4:
                     System.out.println("Cancelando una reserva...");
