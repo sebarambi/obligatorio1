@@ -1,5 +1,7 @@
 package org.example.DAO;
 
+import org.example.controller.HotelController;
+import org.example.controller.TipoHabitacionController;
 import org.example.model.*;
 
 import java.sql.ResultSet;
@@ -9,9 +11,13 @@ import java.util.List;
 
 public class HabitacionDAO {
     private ConnectionDAO connectionDAO;
+    private TipoHabitacionController tipoHabitacionController;
+    private HotelController hotelController;
 
     public HabitacionDAO() {
         this.connectionDAO = new ConnectionDAO();
+        this.tipoHabitacionController = new TipoHabitacionController();
+        this.hotelController = new HotelController();
     }
 
     public boolean insertHabitacion(Habitacion habitacion) {
@@ -28,6 +34,48 @@ public class HabitacionDAO {
                 habitacion.getHotel().getIdHotel()
         );
     }
+
+    public List<Habitacion> getAllHabitaciones() {
+        String query = "SELECT idHabitacion, capacidadCamas, ocupada, camaDoble, idTipoHab, aireAcondicionado, balcon, idHotel FROM Habitacion";
+        List<Habitacion> habitaciones = new ArrayList<>();
+
+        try {
+            ResultSet resultSet = connectionDAO.executeQuery(query);
+
+            while (resultSet.next()) {
+                int idHabitacion = resultSet.getInt("idHabitacion");
+                int capacidadCamas = resultSet.getInt("capacidadCamas");
+                boolean ocupada = resultSet.getBoolean("ocupada");
+                boolean camaDoble = resultSet.getBoolean("camaDoble");
+                boolean aireAcondicionado = resultSet.getBoolean("aireAcondicionado");
+                boolean balcon = resultSet.getBoolean("balcon");
+                int idTipoHab = resultSet.getInt("idTipoHab");
+                int idHotel = resultSet.getInt("idHotel");
+
+                // Obtener los detalles completos de TipoHabitacion y Hotel desde las controladoras
+                TipoHabitacion tipoHabitacion = tipoHabitacionController.getTipoHabitacionById(idTipoHab);
+                Hotel hotel = hotelController.getHotelById(idHotel);
+
+                // Crear el objeto Habitacion
+                Habitacion habitacion = new Habitacion(
+                        idHabitacion,
+                        capacidadCamas,
+                        ocupada,
+                        camaDoble,
+                        tipoHabitacion,
+                        aireAcondicionado,
+                        balcon,
+                        hotel
+                );
+                habitaciones.add(habitacion);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return habitaciones;
+    }
+
 
     public List<Habitacion> listarHabitacionesPorIdHotel(int idHotel) {
         String query = "SELECT h.idHabitacion, h.capacidadCamas, h.ocupada, h.camaDoble, " +
@@ -85,5 +133,6 @@ public class HabitacionDAO {
 
         return habitaciones;
     }
+
 
 }

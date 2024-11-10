@@ -44,7 +44,8 @@ public class HabitacionView {
                     insertHabitacion();
                     break;
                 case 2:
-                    //listarHabitaciones();
+                    List<Habitacion> todasLasHabitaciones = habitacionController.getAllHabitaciones();
+                    listarHabitaciones(todasLasHabitaciones);
                     break;
                 case 3:
                     //modificarHabitacion();
@@ -61,6 +62,7 @@ public class HabitacionView {
             }
         } while (opcion != 5); // Repite el menú hasta que el usuario elija salir
     }
+
     public void insertHabitacion() {
         System.out.println("Ingrese los datos de la habitación a continuación:");
 
@@ -108,7 +110,7 @@ public class HabitacionView {
         boolean balcon = scanner.nextBoolean();
         scanner.nextLine();
 
-        List <Hotel> hoteles = hotelController.listarHoteles();
+        List<Hotel> hoteles = hotelController.listarHoteles();
         System.out.println("Seleccione el hotel:");
         for (Hotel hotel : hoteles) {
             System.out.println("ID: " + hotel.getIdHotel() + ", Nombre: " + hotel.getNombreHotel());
@@ -137,6 +139,15 @@ public class HabitacionView {
         } else {
             System.out.println("Ocurrió un error al insertar la habitación.");
         }
+    }
+    public void listarHabitaciones(List<Habitacion> lista) {
+        System.out.println("Las habitaciones son: ");
+        for (Habitacion habitacion : lista) {
+            System.out.println("-------------------------------------------------");
+            habitacion.mostrarInformacion();
+            System.out.println("-------------------------------------------------");
+        }
+
     }
 
 }

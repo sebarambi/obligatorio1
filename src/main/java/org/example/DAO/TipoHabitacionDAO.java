@@ -1,5 +1,6 @@
 package org.example.DAO;
 
+import org.example.controller.TarifaController;
 import org.example.model.Tarifa;
 import org.example.model.TipoHabitacion;
 
@@ -10,13 +11,15 @@ import java.util.List;
 
 public class TipoHabitacionDAO {
     private ConnectionDAO connectionDAO;
+    private TarifaController tarifaController;
 
     public TipoHabitacionDAO() {
         this.connectionDAO = new ConnectionDAO();
+        this.tarifaController = new TarifaController();
     }
 
-    public TipoHabitacion getTipoDeHabitacionById(int idTipo) {
-        String query = "SELECT idTipo, descripcion FROM TipoHabitacion WHERE idTipo = ?";
+    public TipoHabitacion getTipoHabitacionById(int idTipo) {
+        String query = "SELECT idTipoHab, descripcion, idTarifa FROM TipoHabitacion WHERE idTipoHab = ?";
 
         TipoHabitacion tipoHabitacion = null;
 
@@ -26,11 +29,15 @@ public class TipoHabitacionDAO {
 
             // Si encontramos el resultado, lo asignamos al objeto tipoHabitacion
             if (resultSet.next()) {
-                int id = resultSet.getInt("idTipo");
+                int id = resultSet.getInt("idTipoHab");
                 String descripcion = resultSet.getString("descripcion");
+                int idTarifa = resultSet.getInt("idTarifa");
 
-                // Creamos el objeto TipoHabitacion con los datos obtenidos
-                tipoHabitacion = new TipoHabitacion(id, descripcion);
+                // Aquí obtenemos la tarifa usando el idTarifa
+                Tarifa tarifa = tarifaController.getTarifaById(idTarifa);  // Asegúrate de tener este método en tu TarifaDAO
+
+                // Creamos el objeto TipoHabitacion con los datos obtenidos y la tarifa
+                tipoHabitacion = new TipoHabitacion(id, descripcion, tarifa);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -38,6 +45,7 @@ public class TipoHabitacionDAO {
 
         return tipoHabitacion;
     }
+
 
     public List<TipoHabitacion> listarTipoHabitaciones() {
         String query = "SELECT th.idTipoHab, th.descripcion, t.idTarifa, t.monto " +

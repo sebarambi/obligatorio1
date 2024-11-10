@@ -27,5 +27,6 @@ public class HotelController {
         // Llamar al DAO para actualizar el hotel en la base de datos
         return hotelDAO.modificarHotel(hotel);
     }
+    
 
 }
