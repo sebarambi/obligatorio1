@@ -8,7 +8,7 @@ public class ReservasDAO {
     private ReservasController reservasController;
 
     public ReservasDAO() {
-
+        this.connectionDAO = new ConnectionDAO();
     }
 
     public boolean insertReserva(Reservas reserva) {
