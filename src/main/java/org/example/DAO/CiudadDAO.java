@@ -15,7 +15,7 @@ public class CiudadDAO {
         this.connectionDAO = new ConnectionDAO();
     }
 
-    public List<Ciudad> listarCiudades() {
+    public List<Ciudad> getAllCiudades() {
         String query = "SELECT c.idCiudad, c.nombreCiudad, p.idPais, p.nombrePais " +
                 "FROM ciudad c " +
                 "JOIN pais p ON c.idPais = p.idPais;";
@@ -71,5 +71,25 @@ public class CiudadDAO {
         }
 
         return ciudades;
+    }
+    public Ciudad getCiudadPorId(int idCiudad) {
+        String query = "SELECT idCiudad, nombreCiudad, idPais FROM Ciudad WHERE idCiudad = ?";
+        Ciudad ciudad = null;
+
+        try {
+            ResultSet resultSet = connectionDAO.executeQuery(query, idCiudad);
+
+            if (resultSet.next()) {
+                // Recuperar los datos de la ciudad
+                int id = resultSet.getInt("idCiudad");
+                String nombre = resultSet.getString("nombreCiudad");
+                // Crear el objeto Ciudad
+                ciudad = new Ciudad(id, nombre);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return ciudad;
     }
 }

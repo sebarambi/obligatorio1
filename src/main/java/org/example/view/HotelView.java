@@ -21,7 +21,7 @@ public class HotelView {
     private HotelController hotelController;
 
     PaisDAO paisDAO = new PaisDAO();
-    List<Pais> paises = paisDAO.listarPaises();
+    List<Pais> paises = paisDAO.getAllPaises();
     CiudadDAO ciudadDAO = new CiudadDAO();
     HotelDAO hotelDAO = new HotelDAO();
     List<Hotel> todosLosHoteles = hotelDAO.listarHoteles();

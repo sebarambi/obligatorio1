@@ -10,7 +10,6 @@ import org.example.model.TipoDocumento;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -22,7 +21,7 @@ public class HuespedView {
     PaisDAO paisDAO = new PaisDAO();
     TipoDocumentoDAO tipoDocumentoDAO = new TipoDocumentoDAO();
     HuespedDAO huespedDAO = new HuespedDAO();
-    List<Pais> paises = paisDAO.listarPaises();
+    List<Pais> paises = paisDAO.getAllPaises();
     List<TipoDocumento> tipoDocumentos = tipoDocumentoDAO.listarTiposDocumento();
     List<Huesped> todosLosHuespedes = huespedDAO.listarHuespedes();
 

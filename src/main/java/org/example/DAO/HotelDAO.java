@@ -1,5 +1,7 @@
 package org.example.DAO;
 
+import org.example.controller.CiudadController;
+import org.example.controller.PaisController;
 import org.example.model.Ciudad;
 import org.example.model.Habitacion;
 import org.example.model.Hotel;
@@ -12,9 +14,13 @@ import java.util.List;
 
 public class HotelDAO {
     private ConnectionDAO connectionDAO;
+    private PaisController paisController;
+    private CiudadController ciudadController;
 
     public HotelDAO() {
         this.connectionDAO = new ConnectionDAO();
+        this.paisController = new PaisController();
+        this.ciudadController = new CiudadController();
     }
 
     public boolean insertHotel(Hotel hotel) {
@@ -62,7 +68,7 @@ public class HotelDAO {
                 // Crear el objeto Hotel sin las habitaciones
                 HabitacionDAO habitacionDAO = new HabitacionDAO();
                 List<Habitacion> listaHabitacionPorId = habitacionDAO.listarHabitacionesPorIdHotel(idHotel);
-                Hotel hotel = new Hotel(idHotel, nombreHotel, pais, ciudad, cantidadEstrellas, direccion ,listaHabitacionPorId);
+                Hotel hotel = new Hotel(idHotel, nombreHotel, pais, ciudad, cantidadEstrellas, direccion, listaHabitacionPorId);
                 hoteles.add(hotel);
             }
         } catch (SQLException ex) {
@@ -109,6 +115,7 @@ public class HotelDAO {
 
         return hotel;
     }
+
     public boolean modificarHotel(Hotel hotel) {
         String query = "UPDATE Hotel SET nombreHotel = ?, idPais = ?, idCiudad = ?, " +
                 "cantidadEstrellas = ?, direccion = ? " +
@@ -123,12 +130,51 @@ public class HotelDAO {
                 hotel.getIdHotel()  // El ID del hotel es necesario para la condición WHERE
         );
     }
+
     public boolean eliminarHotel(int idHotel) {
         String query = "DELETE FROM Hotel WHERE idHotel = ?";
 
         return connectionDAO.executeUpdate(query, idHotel);
     }
 
+    public List<Hotel> obtenerHotelesPorCiudad(int idCiudad) {
+        String query = "SELECT h.idHotel, h.nombreHotel, h.direccion, h.cantidadEstrellas, " +
+                "h.idPais, h.idCiudad " +
+                "FROM Hotel h " +
+                "WHERE h.idCiudad = " + idCiudad;  // Usamos concatenación para evitar PreparedStatement
+
+        List<Hotel> hoteles = new ArrayList<>();
+
+        try {
+            // Ejecutamos la consulta
+            ResultSet resultSet = connectionDAO.executeQuery(query);
+
+            while (resultSet.next()) {
+                int idHotel = resultSet.getInt("idHotel");
+                String nombreHotel = resultSet.getString("nombreHotel");
+                String direccion = resultSet.getString("direccion");
+                int cantidadEstrellas = resultSet.getInt("cantidadEstrellas");
+                int idPais = resultSet.getInt("idPais"); // Obtener el idPais de la consulta
+                int idCiudadDb = resultSet.getInt("idCiudad"); // Obtener el idCiudad
+
+                // Obtener el objeto Pais y Ciudad usando sus controladores
+                Pais pais = paisController.obtenerPaisPorId(idPais);  // Llamamos al método del PaisController
+                Ciudad ciudad = ciudadController.obtenerCiudadPorId(idCiudadDb);  // Llamamos al método del CiudadController
+
+                // Si se obtienen correctamente el Pais y Ciudad, creamos el objeto Hotel
+                if (pais != null && ciudad != null) {
+                    Hotel hotel = new Hotel(idHotel, nombreHotel, pais, ciudad, cantidadEstrellas, direccion);
+                    hoteles.add(hotel);
+                } else {
+                    System.out.println("Error al obtener Pais o Ciudad para el Hotel con ID: " + idHotel);
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return hoteles;
+    }
 
 
 

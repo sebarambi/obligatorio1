@@ -14,7 +14,7 @@ public class PaisDAO {
         this.connectionDAO = new ConnectionDAO();
     }
 
-    public List<Pais> listarPaises() {
+    public List<Pais> getAllPaises() {
         String query = "SELECT idPais, nombrePais FROM pais;";
         List<Pais> paises = new ArrayList<>();
 
@@ -35,4 +35,25 @@ public class PaisDAO {
 
         return paises;
     }
+    public Pais getPaisPorId(int idPais) {
+        String query = "SELECT idPais, nombrePais FROM Pais WHERE idPais = " + idPais;
+        Pais pais = null;
+
+        try {
+            ResultSet resultSet = connectionDAO.executeQuery(query);
+
+            if (resultSet.next()) {
+                int id = resultSet.getInt("idPais");
+                String nombrePais = resultSet.getString("nombrePais");
+
+                // Crear el objeto Pais con los valores obtenidos
+                pais = new Pais(id, nombrePais);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return pais;
+    }
+
 }

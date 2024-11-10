@@ -124,5 +124,16 @@ public class Hotel {
             }
         }
     }
+
+    public void mostrarInformacionSinHab() {
+        System.out.println("ID: " + getIdHotel());
+        System.out.println("Nombre: " + getNombreHotel());
+        System.out.println("Pais: " + getPais().getName());
+        System.out.println("Ciudad: " + getCiudad().getNombreCiudad());
+        System.out.println("Cantidad de estrellas: " + getCantidadEstrellas());
+        System.out.println("Direccion: " + getDireccion());
+        System.out.println("<====================================================================>");
+
+    }
 }
 
