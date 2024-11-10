@@ -12,12 +12,14 @@ public class ReservasDAO {
     }
 
     public boolean insertReserva(Reservas reserva) {
-        String query = "INSERT INTO Reservas (idHuesped, fechaInicio, fechaFin) VALUES (?,?,?)";
+        String query = "INSERT INTO Reservas (idHuesped, fechaInicio, fechaFin, cantidadPersonas) VALUES (?,?,?,?)";
 
         return connectionDAO.executeUpdate(query,
                 reserva.getHuesped().getIdHuesped(),
                 reserva.getFechaInicio(),
-                reserva.getFechaFin()
+                reserva.getFechaFin(),
+                reserva.getCantidadPersonas()
+
         );
     }
 

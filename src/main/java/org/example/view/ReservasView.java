@@ -110,40 +110,64 @@ public class ReservasView {
                 return;
             }
 
+            // Validar que la fecha de inicio no sea una fecha pasada
+            Date fechaActual = new Date();
+            if (fechaInicio.before(fechaActual)) {
+                System.out.println("La fecha de inicio no puede ser una fecha pasada.");
+                return;
+            }
+
             listarHabitacionesDisponibles(fechaInicioStr, fechaFinStr);
-            System.out.println("Ingresar el ID de la habitación que queres reservar: ");
+            System.out.print("Ingresar el ID de la habitación que quieres reservar: ");
             int idSeleccionado = scanner.nextInt();
 
-            // Obtener la habitación seleccionada y validación
+            // Obtener la habitación seleccionada y validar
             Habitacion habitacionSeleccionada = habitacionController.getHabitacionById(idSeleccionado);
             if (habitacionSeleccionada == null) {
                 System.out.println("No se encontró la habitación con ID " + idSeleccionado);
                 return;
             }
 
-            System.out.println("Ingresar el ID del huésped que va a ser el responsable de la reserva: ");
+            System.out.print("Ingresar el ID del huésped responsable de la reserva: ");
             List<Huesped> huespedes = huespedController.listarHuespedes();
             for (Huesped huesped : huespedes) {
                 huesped.mostrarInformacion();
             }
 
             int idHuespedSeleccionado = scanner.nextInt();
-
-            // Obtener el huésped seleccionado y validación
             Huesped huespedSeleccionado = huespedController.getHuespedById(idHuespedSeleccionado);
             if (huespedSeleccionado == null) {
                 System.out.println("No se encontró el huésped con ID " + idHuespedSeleccionado);
                 return;
             }
 
-            Reservas reserva = new Reservas(huespedSeleccionado, fechaInicio, fechaFin);
-            boolean reservaInserted = this.reservasController.insertarReserva(reserva);
+            System.out.print("Ingresar la cantidad de personas: ");
+            int cantidadPersonas = scanner.nextInt();
 
+            // Validar que la cantidad de personas no exceda la capacidad de la habitación
+            if (cantidadPersonas > habitacionSeleccionada.getCapacidadCamas()) {
+                System.out.println("La cantidad de personas excede la capacidad de la habitación seleccionada.");
+                return;
+            } else if (cantidadPersonas <= 0) {
+                System.out.println("La cantidad de personas debe ser mayor que cero.");
+                return;
+            }
+
+            // Crear y registrar la reserva
+            Reservas reserva = new Reservas(huespedSeleccionado, fechaInicio, fechaFin, cantidadPersonas);
+            boolean reservaInserted = reservasController.insertarReserva(reserva);
+
+            // Confirmar si la reserva fue ingresada correctamente
+            if (reservaInserted) {
+                System.out.println("¡Reserva ingresada exitosamente!");
+            } else {
+                System.out.println("Hubo un problema al intentar ingresar la reserva. Intente nuevamente.");
+            }
 
         } catch (Exception e) {
             System.out.println("Hubo un error al procesar las fechas o la reserva. Por favor, intente nuevamente.");
             e.printStackTrace();
         }
-
     }
+
 }

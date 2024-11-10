@@ -10,6 +10,7 @@ public class Reservas {
     private Date fechaInicio;
     private Date fechaFin;
     private List<Habitacion> habitacionList;
+    private int cantidadPersonas;
 
     //Getters and Setters
     public int getIdReserva() {
@@ -51,13 +52,23 @@ public class Reservas {
     public void setHabitacionList(List<Habitacion> habitacionList) {
         this.habitacionList = habitacionList;
     }
+
+    public int getCantidadPersonas() {
+        return cantidadPersonas;
+    }
+
+    public void setCantidadPersonas(int cantidadPersonas) {
+        this.cantidadPersonas = cantidadPersonas;
+    }
     //Constructor
 
 
-    public Reservas( Huesped huesped, Date fechaInicio, Date fechaFin) {
+    public Reservas(Huesped huesped, Date fechaInicio, Date fechaFin, int cantidadPersonas) {
+
         this.huesped = huesped;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.habitacionList = new ArrayList<>();
+        this.cantidadPersonas = cantidadPersonas;
     }
 }
