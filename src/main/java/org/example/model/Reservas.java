@@ -1,12 +1,15 @@
 package org.example.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Reservas {
     private int idReserva;
     private Huesped huesped;
     private Date fechaInicio;
     private Date fechaFin;
+    private List<Habitacion> habitacionList;
 
     //Getters and Setters
     public int getIdReserva() {
@@ -41,11 +44,20 @@ public class Reservas {
         this.fechaFin = fechaFin;
     }
 
+    public List<Habitacion> getHabitacionList() {
+        return habitacionList;
+    }
+
+    public void setHabitacionList(List<Habitacion> habitacionList) {
+        this.habitacionList = habitacionList;
+    }
     //Constructor
 
-    public Reservas(Huesped huesped, Date fechaInicio, Date fechaFin) {
+
+    public Reservas( Huesped huesped, Date fechaInicio, Date fechaFin) {
         this.huesped = huesped;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
+        this.habitacionList = new ArrayList<>();
     }
 }
