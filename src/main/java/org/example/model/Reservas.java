@@ -42,7 +42,9 @@ public class Reservas {
     }
 
     //Constructor
-    public Reservas(Huesped huesped, Date fechaInicio, Date fechaFin) {
+
+    public Reservas(int idReserva, Huesped huesped, Date fechaInicio, Date fechaFin) {
+        this.idReserva = idReserva;
         this.huesped = huesped;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;

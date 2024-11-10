@@ -2,10 +2,7 @@ package org.example;
 
 import java.util.Scanner;
 
-import org.example.view.ConsultasHotelView;
-import org.example.view.HabitacionView;
-import org.example.view.HotelView;
-import org.example.view.HuespedView;
+import org.example.view.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -20,7 +17,7 @@ public class Main {
             System.out.println("2. Administracion de Huespedes");
             System.out.println("3. Administracion de Habitaciones");
             System.out.println("4. Consultas sobre Hoteles");
-            System.out.println("4. Reservas");
+            System.out.println("5. Reservas");
             System.out.println("5. Salir");
             System.out.print("Seleccione una opción: ");
 
@@ -45,7 +42,8 @@ public class Main {
                     consultasHotelView.mostrarMenuConsultas();
                     break;
                 case 5:
-
+                    ReservasView reservasView = new ReservasView();
+                    reservasView.MenuReservas();
                     break;
                 case 6:
                     System.out.println("Gracias por utilizar el sistema. ¡Hasta luego!");

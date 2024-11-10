@@ -7,7 +7,7 @@ public class ConnectionDAO {
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "magnesium";
 
-    private Connection getConnection() throws SQLException {
+    Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
     }
 

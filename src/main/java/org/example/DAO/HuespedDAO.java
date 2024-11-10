@@ -1,5 +1,7 @@
 package org.example.DAO;
 
+import org.example.controller.PaisController;
+import org.example.controller.TipoDocumentoController;
 import org.example.model.Huesped;
 import org.example.model.Pais;
 import org.example.model.TipoDocumento;
@@ -12,9 +14,12 @@ import java.util.List;
 
 public class HuespedDAO {
     private ConnectionDAO connectionDAO;
+    private PaisController paisController;
+    private TipoDocumentoController tipoDocumentoController;
 
     public HuespedDAO() {
         this.connectionDAO = new ConnectionDAO();
+        this.paisController = new PaisController();
     }
 
     public boolean insertHuesped(Huesped huesped) {
@@ -141,6 +146,54 @@ public class HuespedDAO {
         String query = "DELETE FROM Huesped WHERE idHuesped = ?";
 
         return connectionDAO.executeUpdate(query, idHuesped);
+    }
+
+    public List<Huesped> getAllHuespedes() {
+        String query = "SELECT idHuesped, nombre, aPaterno, aMaterno, idTipoDoc, numDocumento, fechaNacimiento, telefono, idPais FROM Huesped";
+        List<Huesped> huespedes = new ArrayList<>();
+
+        try {
+            // Ejecutamos la consulta
+            ResultSet resultSet = connectionDAO.executeQuery(query);
+
+            while (resultSet.next()) {
+                // Obtener los valores de la base de datos
+                int idHuesped = resultSet.getInt("idHuesped");
+                String nombre = resultSet.getString("nombre");
+                String aPaterno = resultSet.getString("aPaterno");
+                String aMaterno = resultSet.getString("aMaterno");
+                int idTipoDoc = resultSet.getInt("idTipoDoc");
+                String numDocumento = resultSet.getString("numDocumento");
+                Date fechaNacimiento = resultSet.getDate("fechaNacimiento");
+                String telefono = resultSet.getString("telefono");
+                int idPais = resultSet.getInt("idPais");
+
+                // Obtener los detalles de TipoDocumento y Pais mediante las controladoras
+                TipoDocumento tipoDocumento = tipoDocumentoController.getTipoDocumentoById(idTipoDoc);
+                Pais pais = paisController.obtenerPaisPorId(idPais);
+
+                // Crear el objeto Huesped
+                Huesped huesped = new Huesped(
+                        idHuesped,
+                        nombre,
+                        aPaterno,
+                        aMaterno,
+                        tipoDocumento,
+                        numDocumento,
+                        fechaNacimiento,
+                        telefono,
+                        pais
+                );
+
+                // Agregar el huesped a la lista
+                huespedes.add(huesped);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        // Retornar la lista de huespedes
+        return huespedes;
     }
 
 

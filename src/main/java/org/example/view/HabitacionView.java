@@ -74,9 +74,6 @@ public class HabitacionView {
         int capacidadCamas = scanner.nextInt();
         scanner.nextLine();
 
-        System.out.print("¿La habitación está ocupada? (true/false): ");
-        boolean ocupada = scanner.nextBoolean();
-        scanner.nextLine();
 
         System.out.print("¿La habitación tiene cama doble? (true/false): ");
         boolean camaDoble = scanner.nextBoolean();
@@ -131,7 +128,7 @@ public class HabitacionView {
             return;
         }
 
-        Habitacion habitacion = new Habitacion(idHabitacion, capacidadCamas, ocupada, camaDoble, tipoHabitacionSeleccionado, aireAcondicionado, balcon, hotelSeleccionado);
+        Habitacion habitacion = new Habitacion(idHabitacion, capacidadCamas, camaDoble, tipoHabitacionSeleccionado, aireAcondicionado, balcon, hotelSeleccionado);
         boolean habitacionInserted = this.habitacionController.insertHabitacion(habitacion);
 
         if (habitacionInserted) {

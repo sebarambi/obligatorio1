@@ -35,4 +35,27 @@ public class TipoDocumentoDAO {
 
         return tiposDocumento;
     }
+    public TipoDocumento getTipoDocumentoById(int idTipoDoc) {
+        String query = "SELECT idTipoDoc, nombre FROM tipodocumento WHERE idTipoDoc = ?";
+
+        TipoDocumento tipoDocumento = null;
+
+        try {
+            // Ejecutar la consulta y obtener el ResultSet
+            ResultSet resultSet = connectionDAO.executeQuery(query, idTipoDoc);
+
+            // Si hay un resultado, lo asignamos al objeto tipoDocumento
+            if (resultSet.next()) {
+                int id = resultSet.getInt("idTipoDoc");
+                String nombre = resultSet.getString("nombre");
+
+                // Crear el objeto TipoDocumento con los valores obtenidos
+                tipoDocumento = new TipoDocumento(id, nombre);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return tipoDocumento;
+    }
 }

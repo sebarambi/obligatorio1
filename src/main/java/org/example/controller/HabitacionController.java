@@ -6,6 +6,7 @@ import org.example.model.Habitacion;
 import org.example.model.Huesped;
 import org.example.view.HabitacionView;
 
+import java.util.Date;
 import java.util.List;
 
 public class HabitacionController {
@@ -42,4 +43,9 @@ public class HabitacionController {
         }
     }
 
+    public List<Habitacion> listarHabitacionesDisponibles(Date fechaInicio, Date fechaFin) {
+        // Llamamos al DAO para obtener las habitaciones disponibles
+        List<Habitacion> habitacionesDisponibles = habitacionDAO.getHabitacionesDisponibles(fechaInicio, fechaFin);
+        return habitacionesDisponibles;
+    }
 }
