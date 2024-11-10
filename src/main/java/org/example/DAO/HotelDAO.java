@@ -24,7 +24,7 @@ public class HotelDAO {
     }
 
     public boolean insertHotel(Hotel hotel) {
-        String query = "INSERT INTO Hotel (idHotel,nombreHotel,idPais,idCiudad, cantidadEstrellas, direccion) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Hotel (idHotel, nombreHotel, idPais, idCiudad, cantidadEstrellas, direccion) VALUES (?, ?, ?, ?, ?, ?)";
 
         return connectionDAO.executeUpdate(query,
                 hotel.getIdHotel(),
@@ -141,13 +141,13 @@ public class HotelDAO {
         String query = "SELECT h.idHotel, h.nombreHotel, h.direccion, h.cantidadEstrellas, " +
                 "h.idPais, h.idCiudad " +
                 "FROM Hotel h " +
-                "WHERE h.idCiudad = " + idCiudad;  // Usamos concatenación para evitar PreparedStatement
+                "WHERE h.idCiudad = ?";  // Usamos ? para evitar SQL Injection
 
         List<Hotel> hoteles = new ArrayList<>();
 
         try {
             // Ejecutamos la consulta
-            ResultSet resultSet = connectionDAO.executeQuery(query);
+            ResultSet resultSet = connectionDAO.executeQuery(query, idCiudad);
 
             while (resultSet.next()) {
                 int idHotel = resultSet.getInt("idHotel");
@@ -176,6 +176,69 @@ public class HotelDAO {
         return hoteles;
     }
 
+    public List<Hotel> obtenerHotelesPorNombre(String nombreHotel) {
+        String query = "SELECT * FROM Hotel WHERE nombreHotel LIKE ?";
+        List<Hotel> hoteles = new ArrayList<>();
 
+        try {
+            // Ejecutamos la consulta SQL
+            ResultSet resultSet = connectionDAO.executeQuery(query, "%" + nombreHotel + "%");
 
+            while (resultSet.next()) {
+                int idHotel = resultSet.getInt("idHotel");
+                String nombre = resultSet.getString("nombreHotel");
+                String direccion = resultSet.getString("direccion");
+                int cantidadEstrellas = resultSet.getInt("cantidadEstrellas");
+                int idPais = resultSet.getInt("idPais");
+                int idCiudad = resultSet.getInt("idCiudad");
+
+                // Obtener el objeto Pais utilizando el idPais
+                Pais pais = paisController.obtenerPaisPorId(idPais);
+
+                // Obtener el objeto Ciudad utilizando el idCiudad
+                Ciudad ciudad = ciudadController.obtenerCiudadPorId(idCiudad);
+
+                // Crear un objeto Hotel con la información obtenida
+                Hotel hotel = new Hotel(idHotel, nombreHotel, pais, ciudad, cantidadEstrellas, direccion);
+                hoteles.add(hotel);  // Agregar el hotel a la lista
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return hoteles;
+    }
+
+    public List<Hotel> obtenerHotelesPorEstrellas(int cantidadEstrellas) {
+        String query = "SELECT * FROM Hotel WHERE cantidadEstrellas = ?";
+        List<Hotel> hoteles = new ArrayList<>();
+
+        try {
+            // Ejecutamos la consulta SQL
+            ResultSet resultSet = connectionDAO.executeQuery(query, cantidadEstrellas);
+
+            while (resultSet.next()) {
+                int idHotel = resultSet.getInt("idHotel");
+                String nombre = resultSet.getString("nombreHotel");
+                String direccion = resultSet.getString("direccion");
+                int cantidadEstrellasSeleccionada = resultSet.getInt("cantidadEstrellas"); // Cambié el nombre aquí
+                int idPais = resultSet.getInt("idPais");
+                int idCiudad = resultSet.getInt("idCiudad");
+
+                // Obtener el objeto Pais utilizando el idPais
+                Pais pais = paisController.obtenerPaisPorId(idPais);
+
+                // Obtener el objeto Ciudad utilizando el idCiudad
+                Ciudad ciudad = ciudadController.obtenerCiudadPorId(idCiudad);
+
+                // Crear un objeto Hotel con la información obtenida
+                Hotel hotel = new Hotel(idHotel, nombre, pais, ciudad, cantidadEstrellasSeleccionada, direccion);
+                hoteles.add(hotel);  // Agregar el hotel a la lista
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return hoteles;
+    }
 }
