@@ -2,7 +2,6 @@ package org.example;
 
 import java.util.Scanner;
 
-import org.example.model.Hotel;
 import org.example.view.HabitacionView;
 import org.example.view.HotelView;
 import org.example.view.HuespedView;

@@ -92,6 +92,8 @@ public class Habitacion {
     public void mostrarInformacion() {
         System.out.println("ID de Habitacion: " + getIdHabitacion());
         System.out.println("Hotel: " + getHotel().getNombreHotel());
+        System.out.println("Pais: " + getHotel().getPais().getName());
+        System.out.println("Ciudad: " + getHotel().getCiudad().getNombreCiudad());
         System.out.println("Capacidad de camas: " + getCapacidadCamas());
         System.out.println("Esta ocupada actualmente: " + (isOcupada() ? "Sí" : "No"));
         System.out.println("Cama doble: " + (isCamaDoble() ? "Sí" : "No"));

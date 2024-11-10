@@ -18,7 +18,28 @@ public class HabitacionController {
     public boolean insertHabitacion(Habitacion habitacion) {
         return this.habitacionDAO.insertHabitacion(habitacion);
     }
+
     public List<Habitacion> getAllHabitaciones() {
         return habitacionDAO.getAllHabitaciones();
     }
+
+    public Habitacion getHabitacionById(int idHabitacion) {
+        return habitacionDAO.getHabitacionById(idHabitacion);
+    }
+
+    public boolean modificarHabitacion(Habitacion habitacion) {
+        return habitacionDAO.modificarHabitacion(habitacion);
+    }
+
+    public boolean eliminarHabitacion(int idHabitacion) {
+        Habitacion habitacion = getHabitacionById(idHabitacion);
+
+        if (habitacion != null) {
+            return habitacionDAO.eliminarHabitacion(idHabitacion);
+        } else {
+            System.out.println("No se encontró la habitación con el ID especificado.");
+            return false;
+        }
+    }
+
 }

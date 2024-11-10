@@ -48,10 +48,10 @@ public class HabitacionView {
                     listarHabitaciones(todasLasHabitaciones);
                     break;
                 case 3:
-                    //modificarHabitacion();
+                    modificarHabitacion();
                     break;
                 case 4:
-                    //eliminarHabitacion();
+                    eliminarHabitacion();
                     break;
                 case 5:
                     System.out.println("Gracias por usar la gestión de Habitaciones.");
@@ -140,6 +140,7 @@ public class HabitacionView {
             System.out.println("Ocurrió un error al insertar la habitación.");
         }
     }
+
     public void listarHabitaciones(List<Habitacion> lista) {
         System.out.println("Las habitaciones son: ");
         for (Habitacion habitacion : lista) {
@@ -150,4 +151,134 @@ public class HabitacionView {
 
     }
 
+    public void modificarHabitacion() {
+        List<Habitacion> habitacionesParaModificar = habitacionController.getAllHabitaciones();
+        listarHabitaciones(habitacionesParaModificar);
+        System.out.println("Ingrese el ID de la habitación que desea modificar: ");
+        int idAModificar = scanner.nextInt();
+
+        // Buscar la habitación por ID
+        Habitacion habitacion = habitacionController.getHabitacionById(idAModificar);
+
+        // Si la habitación existe, proceder con la modificación
+        if (habitacion != null) {
+            System.out.println("Habitación encontrada: ");
+            habitacion.mostrarInformacion();
+
+            // Modificar capacidad de camas
+            System.out.println("Ingrese la nueva capacidad de camas (deje en blanco para no modificar): ");
+            scanner.nextLine();  // Consumir salto de línea pendiente
+            String nuevaCapacidadCamas = scanner.nextLine();
+            if (!nuevaCapacidadCamas.isEmpty()) {
+                try {
+                    habitacion.setCapacidadCamas(Integer.parseInt(nuevaCapacidadCamas));
+                } catch (NumberFormatException e) {
+                    System.out.println("Capacidad inválida.");
+                }
+            }
+
+            // Modificar cama doble
+            System.out.println("¿Desea modificar la cama doble? (S/N): ");
+            String respuestaCamaDoble = scanner.nextLine();
+            if (respuestaCamaDoble.equalsIgnoreCase("S")) {
+                System.out.println("¿La habitación tendrá cama doble? (S/N): ");
+                String camaDobleRespuesta = scanner.nextLine();
+                habitacion.setCamaDoble(camaDobleRespuesta.equalsIgnoreCase("S"));
+            }
+
+            // Modificar tipo de habitación
+            System.out.println("¿Desea modificar el tipo de habitación? (S/N): ");
+            String respuestaTipoHabitacion = scanner.nextLine();
+            if (respuestaTipoHabitacion.equalsIgnoreCase("S")) {
+                System.out.println("Seleccione el nuevo tipo de habitación:");
+                for (TipoHabitacion tipo : tiposHabitacion) {
+                    System.out.println("ID: " + tipo.getIdTipoHabitacion() + ", Nombre: " + tipo.getDescripcion());
+                }
+                int idTipoSeleccionado = scanner.nextInt();
+                scanner.nextLine();  // Consumir salto de línea pendiente
+                TipoHabitacion tipoSeleccionado = null;
+
+                for (TipoHabitacion tipo : tiposHabitacion) {
+                    if (tipo.getIdTipoHabitacion() == idTipoSeleccionado) {
+                        tipoSeleccionado = tipo;
+                        break;
+                    }
+                }
+                if (tipoSeleccionado != null) {
+                    habitacion.setTipoHabitacion(tipoSeleccionado);
+                    System.out.println("Tipo de habitación actualizado a: " + tipoSeleccionado.getDescripcion());
+                } else {
+                    System.out.println("ID no válido. No se encontró el tipo de habitación.");
+                }
+            }
+
+
+            // Modificar aire acondicionado
+            System.out.println("¿Desea modificar el aire acondicionado? (S/N): ");
+            String respuestaAire = scanner.nextLine();
+            if (respuestaAire.equalsIgnoreCase("S")) {
+                System.out.println("¿La habitación tendrá aire acondicionado? (S/N): ");
+                String aireRespuesta = scanner.nextLine();
+                habitacion.setAireAcondicionado(aireRespuesta.equalsIgnoreCase("S"));
+            }
+
+            // Modificar balcón
+            System.out.println("¿Desea modificar el balcón? (S/N): ");
+            String respuestaBalcon = scanner.nextLine();
+            if (respuestaBalcon.equalsIgnoreCase("S")) {
+                System.out.println("¿La habitación tendrá balcón? (S/N): ");
+                String balconRespuesta = scanner.nextLine();
+                habitacion.setBalcon(balconRespuesta.equalsIgnoreCase("S"));
+            }
+
+            // Una vez modificada la habitación, la pasamos al DAO para actualizarla en la base de datos
+            boolean success = habitacionController.modificarHabitacion(habitacion);
+
+            if (success) {
+                System.out.println("Habitación modificada correctamente.");
+            } else {
+                System.out.println("Error al modificar la habitación.");
+            }
+        } else {
+            System.out.println("Habitación no encontrada.");
+        }
+    }
+    public void eliminarHabitacion() {
+        // Listar todas las habitaciones registradas
+        List<Habitacion> todasLasHabitaciones = habitacionController.getAllHabitaciones();
+        listarHabitaciones(todasLasHabitaciones);
+
+        System.out.println("Ingrese el ID de la habitación que desea eliminar: ");
+        int idAEliminar = scanner.nextInt();
+
+        // Buscar la habitación por ID
+        Habitacion habitacion = habitacionController.getHabitacionById(idAEliminar);
+
+        // Si la habitación existe, proceder a eliminarla
+        if (habitacion != null) {
+            // Confirmar eliminación
+            System.out.println("Habitación encontrada: ID " + habitacion.getIdHabitacion() + ", Capacidad de camas: " + habitacion.getCapacidadCamas());
+            System.out.println("¿Está seguro de que desea eliminar esta habitación? (s/n): ");
+            scanner.nextLine();  // Consumir el salto de línea pendiente
+            String confirmacion = scanner.nextLine();
+
+            if (confirmacion.equalsIgnoreCase("s")) {
+                // Eliminar habitación
+                boolean eliminada = habitacionController.eliminarHabitacion(idAEliminar);
+                if (eliminada) {
+                    System.out.println("Habitación eliminada exitosamente.");
+                } else {
+                    System.out.println("Ocurrió un error al eliminar la habitación.");
+                }
+            } else {
+                System.out.println("Eliminación cancelada.");
+            }
+        } else {
+            System.out.println("Habitación no encontrada.");
+        }
+    }
+
+
 }
+
+

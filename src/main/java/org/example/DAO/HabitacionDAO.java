@@ -34,6 +34,28 @@ public class HabitacionDAO {
                 habitacion.getHotel().getIdHotel()
         );
     }
+    public boolean modificarHabitacion(Habitacion habitacion) {
+        String query = "UPDATE Habitacion SET capacidadCamas = ?, camaDoble = ?, " +
+                "idTipoHab = ?, aireAcondicionado = ?, balcon = ?, idHotel = ? " +
+                "WHERE idHabitacion = ?";
+
+        return connectionDAO.executeUpdate(query,
+                habitacion.getCapacidadCamas(),
+                habitacion.isCamaDoble(),
+                habitacion.getTipoHabitacion().getIdTipoHabitacion(),
+                habitacion.isAireAcondicionado(),
+                habitacion.isBalcon(),
+                habitacion.getHotel().getIdHotel(),
+                habitacion.getIdHabitacion()  // El ID de la habitación es necesario para la condición WHERE
+        );
+    }
+    public boolean eliminarHabitacion(int idHabitacion) {
+        String query = "DELETE FROM Habitacion WHERE idHabitacion = ?";
+
+        return connectionDAO.executeUpdate(query, idHabitacion);
+    }
+
+
 
     public List<Habitacion> getAllHabitaciones() {
         String query = "SELECT idHabitacion, capacidadCamas, ocupada, camaDoble, idTipoHab, aireAcondicionado, balcon, idHotel FROM Habitacion";
@@ -75,6 +97,45 @@ public class HabitacionDAO {
 
         return habitaciones;
     }
+    public Habitacion getHabitacionById(int idHabitacion) {
+        String query = "SELECT h.idHabitacion, h.capacidadCamas, h.ocupada, h.camaDoble, " +
+                "h.aireAcondicionado, h.balcon, h.idTipoHab, h.idHotel " +
+                "FROM Habitacion h " +
+                "WHERE h.idHabitacion = ?";
+
+        Habitacion habitacion = null;
+
+        try {
+            // Ejecutar la consulta y obtener el ResultSet
+            ResultSet resultSet = connectionDAO.executeQuery(query, idHabitacion);
+
+            // Si hay un resultado, lo asignamos al objeto habitacion
+            if (resultSet.next()) {
+                int id = resultSet.getInt("idHabitacion");
+                int capacidadCamas = resultSet.getInt("capacidadCamas");
+                boolean ocupada = resultSet.getBoolean("ocupada");
+                boolean camaDoble = resultSet.getBoolean("camaDoble");
+                boolean aireAcondicionado = resultSet.getBoolean("aireAcondicionado");
+                boolean balcon = resultSet.getBoolean("balcon");
+
+                // Obtener el TipoHabitacion usando el idTipoHab
+                int idTipoHab = resultSet.getInt("idTipoHab");
+                TipoHabitacion tipoHabitacion = tipoHabitacionController.getTipoHabitacionById(idTipoHab);
+
+                // Obtener el Hotel usando el idHotel
+                int idHotel = resultSet.getInt("idHotel");
+                Hotel hotel = hotelController.getHotelById(idHotel);
+
+                // Crear el objeto Habitacion con los valores obtenidos
+                habitacion = new Habitacion(id, capacidadCamas, ocupada, camaDoble,tipoHabitacion, aireAcondicionado, balcon, hotel);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return habitacion;
+    }
+
 
 
     public List<Habitacion> listarHabitacionesPorIdHotel(int idHotel) {
