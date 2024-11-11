@@ -11,7 +11,6 @@ public class PaisController {
     public PaisController() {
     }
 
-    // Corregir llamada al método de instancia
     public List<Pais> obtenerTodosLosPaises() {
         return paisDAO.getAllPaises(); // Usar la instancia paisDAO
     }

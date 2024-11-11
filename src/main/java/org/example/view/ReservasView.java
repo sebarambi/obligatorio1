@@ -35,12 +35,12 @@ public class ReservasView {
             System.out.println("Menú de Reservas:");
             System.out.println("1. Reserva de habitaciones.");
             System.out.println("2. Modificar reservas.");
-            System.out.println("3. Salir.");
+            System.out.println("3. Eliminar reservas.");
             System.out.println("0. Salir.");
             System.out.print("Seleccione una opción: ");
 
             opcion = scanner.nextInt();
-            scanner.nextLine();  // Limpiar el buffer
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
@@ -50,7 +50,7 @@ public class ReservasView {
                     modificarReserva();
                     break;
                 case 3:
-
+                    eliminarReserva();
                     break;
                 case 0:
                     System.out.println("Saliendo del sistema...");
@@ -70,24 +70,17 @@ public class ReservasView {
         Date fechaFin = null;
 
         try {
-            // Convertir las fechas de String a Date
             fechaInicio = formato.parse(fechaInicioStr);
             fechaFin = formato.parse(fechaFinStr);
 
-            // Imprimir las fechas convertidas (opcional)
-            System.out.println("Fecha de inicio: " + fechaInicio);
-            System.out.println("Fecha de fin: " + fechaFin);
-
-            // Llamar al método de controlador para obtener habitaciones disponibles
+            System.out.println("Las habitaciones disponibles entre las fechas seleccionadas son: ");
             List<Habitacion> habitaciones = habitacionController.listarHabitacionesDisponibles(fechaInicio, fechaFin);
-
-            // Mostrar las habitaciones disponibles
             if (habitaciones.isEmpty()) {
                 System.out.println("No hay habitaciones disponibles en esas fechas.");
             } else {
-                System.out.println("Habitaciones disponibles:");
                 for (Habitacion habitacion : habitaciones) {
                     habitacion.mostrarInformacion();
+                    System.out.println("========================================================");
                 }
             }
         } catch (Exception e) {
@@ -98,24 +91,22 @@ public class ReservasView {
 
     public void insertarReserva() {
         try {
-            // Solicitar fechas de inicio y fin
             System.out.print("Ingrese la fecha de inicio (yyyy-mm-dd): ");
             String fechaInicioStr = scanner.nextLine();
             System.out.print("Ingrese la fecha de fin (yyyy-mm-dd): ");
             String fechaFinStr = scanner.nextLine();
 
-            // Parsear las fechas de String a Date
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date fechaInicio = dateFormat.parse(fechaInicioStr);
             Date fechaFin = dateFormat.parse(fechaFinStr);
 
-            // Validar que la fecha de inicio no sea posterior a la de fin
+
             if (fechaInicio.after(fechaFin)) {
                 System.out.println("La fecha de inicio no puede ser posterior a la fecha de fin.");
                 return;
             }
 
-            // Validar que la fecha de inicio no sea una fecha pasada
+
             Date fechaActual = new Date();
             if (fechaInicio.before(fechaActual)) {
                 System.out.println("La fecha de inicio no puede ser una fecha pasada.");
@@ -126,7 +117,6 @@ public class ReservasView {
             System.out.print("Ingresar el ID de la habitación que quieres reservar: ");
             int idSeleccionado = scanner.nextInt();
 
-            // Obtener la habitación seleccionada y validar
             Habitacion habitacionSeleccionada = habitacionController.getHabitacionById(idSeleccionado);
             if (habitacionSeleccionada == null) {
                 System.out.println("No se encontró la habitación con ID " + idSeleccionado);
@@ -137,6 +127,7 @@ public class ReservasView {
             List<Huesped> huespedes = huespedController.listarHuespedes();
             for (Huesped huesped : huespedes) {
                 huesped.mostrarInformacion();
+                System.out.println("==============================================");
             }
 
             int idHuespedSeleccionado = scanner.nextInt();
@@ -149,10 +140,9 @@ public class ReservasView {
             System.out.print("Ingresar la cantidad de personas: ");
             int cantidadPersonas = scanner.nextInt();
 
-            System.out.print("Ingresar la cantidad de personas: ");
+            System.out.print("Ingresar observaciones para la reserva: ");
             String descripciones = scanner.nextLine();
 
-            // Validar que la cantidad de personas no exceda la capacidad de la habitación
             if (cantidadPersonas > habitacionSeleccionada.getCapacidadCamas()) {
                 System.out.println("La cantidad de personas excede la capacidad de la habitación seleccionada.");
                 return;
@@ -161,11 +151,9 @@ public class ReservasView {
                 return;
             }
 
-            // Crear y registrar la reserva
-            Reservas reserva = new Reservas(huespedSeleccionado, fechaInicio, fechaFin, cantidadPersonas, "");
+            Reservas reserva = new Reservas(huespedSeleccionado, fechaInicio, fechaFin, cantidadPersonas, descripciones);
             boolean reservaInserted = reservasController.insertarReserva(reserva);
 
-            // Confirmar si la reserva fue ingresada correctamente
             if (reservaInserted) {
                 System.out.println("¡Reserva ingresada exitosamente!");
             } else {
@@ -179,46 +167,35 @@ public class ReservasView {
     }
 
     public void modificarReserva() {
-        // Paso 1: Solicitar el ID del huésped para ver sus reservas
         System.out.println("Ingrese el ID del huésped para ver sus reservas: ");
         int idHuesped = scanner.nextInt();
 
-        // Validación de que el huésped existe
         Huesped huesped = huespedController.getHuespedById(idHuesped);
         if (huesped == null) {
             System.out.println("El huésped con ID " + idHuesped + " no existe.");
-            return; // Si el huésped no existe, salir del método
+            return;
         }
-
-        // Paso 2: Obtener las reservas del huésped
         List<Reservas> reservas = reservasController.obtenerReservasPorIdHuesped(idHuesped);
 
         if (reservas.isEmpty()) {
             System.out.println("El huésped no tiene reservas.");
             return;
         }
-
-        // Paso 3: Listar las reservas del huésped
         System.out.println("Reservas del huésped ID " + idHuesped + ":");
         for (Reservas reserva : reservas) {
             System.out.println("ID Reserva: " + reserva.getIdReserva() + ", Fecha Inicio: " + reserva.getFechaInicio() + ", Fecha Fin: " + reserva.getFechaFin() + ", Cantidad Personas: " + reserva.getCantidadPersonas());
         }
-
-        // Paso 4: Solicitar al usuario que ingrese el ID de la reserva que desea modificar
         System.out.println("Ingrese el ID de la reserva que desea modificar: ");
         int idReservaAModificar = scanner.nextInt();
 
-        // Paso 5: Buscar la reserva por ID
         Reservas reserva = reservasController.obtenerReservaPorId(idReservaAModificar);
 
-        // Paso 6: Verificar si la reserva existe
         if (reserva != null) {
             System.out.println("Reserva encontrada: ");
             System.out.println("ID Reserva: " + reserva.getIdReserva() + ", Fecha Inicio: " + reserva.getFechaInicio() + ", Fecha Fin: " + reserva.getFechaFin() + ", Cantidad Personas: " + reserva.getCantidadPersonas());
 
-            // Paso 7: Modificar la fecha de inicio de la reserva
             System.out.println("¿Desea modificar la fecha de inicio? (S/N): ");
-            scanner.nextLine(); // Consumir salto de línea pendiente
+            scanner.nextLine();
             String respuestaInicio = scanner.nextLine();
             if (respuestaInicio.equalsIgnoreCase("S")) {
                 System.out.println("Ingrese la nueva fecha de inicio (yyyy-mm-dd): ");
@@ -232,7 +209,7 @@ public class ReservasView {
                 }
             }
 
-            // Paso 8: Modificar la fecha de fin de la reserva
+
             System.out.println("¿Desea modificar la fecha de fin? (S/N): ");
             String respuestaFin = scanner.nextLine();
             if (respuestaFin.equalsIgnoreCase("S")) {
@@ -247,7 +224,6 @@ public class ReservasView {
                 }
             }
 
-            // Paso 9: Modificar la cantidad de personas de la reserva
             System.out.println("¿Desea modificar la cantidad de personas? (S/N): ");
             String respuestaCantidadPersonas = scanner.nextLine();
             if (respuestaCantidadPersonas.equalsIgnoreCase("S")) {
@@ -256,7 +232,6 @@ public class ReservasView {
                 reserva.setCantidadPersonas(nuevaCantidadPersonas);
             }
 
-            // Paso 10: Modificar las observaciones de la reserva
             System.out.println("¿Desea modificar las observaciones? (S/N): ");
             scanner.nextLine(); // Consumir salto de línea pendiente
             String respuestaObservaciones = scanner.nextLine();
@@ -266,13 +241,60 @@ public class ReservasView {
                 reserva.setObservaciones(nuevasObservaciones);
             }
 
-            // Paso 11: Una vez modificada la reserva, la pasamos al DAO para actualizarla en la base de datos
             boolean success = reservasController.modificarReserva(reserva);
 
             if (success) {
                 System.out.println("Reserva modificada correctamente.");
             } else {
                 System.out.println("Error al modificar la reserva.");
+            }
+        } else {
+            System.out.println("Reserva no encontrada.");
+        }
+    }
+
+    public void eliminarReserva() {
+        System.out.println("Ingrese el ID del huésped para ver sus reservas: ");
+        int idHuesped = scanner.nextInt();
+
+        Huesped huesped = huespedController.getHuespedById(idHuesped);
+        if (huesped == null) {
+            System.out.println("El huésped con ID " + idHuesped + " no existe.");
+            return;
+        }
+
+        List<Reservas> reservas = reservasController.obtenerReservasPorIdHuesped(idHuesped);
+
+        if (reservas.isEmpty()) {
+            System.out.println("El huésped no tiene reservas.");
+            return;
+        }
+
+
+        System.out.println("Las Reservas del huésped seleccionado son: ");
+        for (Reservas reserva : reservas) {
+            System.out.println("ID: " + reserva.getIdReserva() + ", Fecha Inicio: " + reserva.getFechaInicio() + ", Fecha Fin: " + reserva.getFechaFin() + ", Cantidad Personas: " + reserva.getCantidadPersonas());
+            System.out.println("=====================================================================================================================================================================================");
+        }
+        System.out.println("Ingrese el ID de la reserva que desea eliminar: ");
+        int idAEliminar = scanner.nextInt();
+
+        Reservas reserva = reservasController.obtenerReservaPorId(idAEliminar);
+        if (reserva != null) {
+            System.out.println("Reserva encontrada: ID " + reserva.getIdReserva() + ", Huesped: " + reserva.getHuesped().getNombre());
+            System.out.println("¿Está seguro de que desea eliminar esta reserva? (s/n): ");
+            scanner.nextLine();
+            String confirmacion = scanner.nextLine();
+
+            if (confirmacion.equalsIgnoreCase("s")) {
+                boolean eliminada = reservasController.eliminarReserva(idAEliminar);
+                if (eliminada) {
+                    System.out.println("Reserva eliminada exitosamente.");
+                } else {
+                    System.out.println("Ocurrió un error al eliminar la reserva.");
+                }
+            } else {
+                System.out.println("Eliminación cancelada.");
             }
         } else {
             System.out.println("Reserva no encontrada.");

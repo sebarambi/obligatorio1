@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.DAO.ReservasDAO;
+import org.example.model.Habitacion;
 import org.example.model.Reservas;
 
 import java.util.List;
@@ -33,5 +34,16 @@ public class ReservasController {
     // Modificar una reserva
     public boolean modificarReserva(Reservas reserva) {
         return reservasDAO.modificarReserva(reserva);  // Delegamos al DAO para hacer el update
+    }
+
+    public boolean eliminarReserva(int idReserva) {
+        Reservas reserva = obtenerReservaPorId(idReserva);
+
+        if (reserva != null) {
+            return reservasDAO.eliminarReserva(idReserva);
+        } else {
+            System.out.println("No se encontró la habitación con el ID especificado.");
+            return false;
+        }
     }
 }

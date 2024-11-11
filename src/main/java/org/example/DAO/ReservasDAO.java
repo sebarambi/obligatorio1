@@ -33,6 +33,11 @@ public class ReservasDAO {
 
         );
     }
+    public boolean eliminarReserva(int idReserva) {
+        String query = "DELETE FROM Reservas WHERE idReserva = ?";
+
+        return connectionDAO.executeUpdate(query, idReserva);
+    }
 
     public boolean modificarReserva(Reservas reserva) {
         String query = "UPDATE Reservas SET fechaInicio = ?, fechaFin = ?, " +
