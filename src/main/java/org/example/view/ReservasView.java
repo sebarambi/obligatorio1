@@ -63,7 +63,6 @@ public class ReservasView {
     }
 
     public void listarHabitacionesDisponibles(String fechaInicioStr, String fechaFinStr) {
-        // Crear un SimpleDateFormat para parsear las fechas
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
 
         Date fechaInicio = null;
@@ -109,7 +108,7 @@ public class ReservasView {
 
             Date fechaActual = new Date();
             if (fechaInicio.before(fechaActual)) {
-                System.out.println("La fecha de inicio no puede ser una fecha pasada.");
+                System.out.println("La fecha de inicio no puede ser una fecha pasada o actual.");
                 return;
             }
 
@@ -137,10 +136,10 @@ public class ReservasView {
                 return;
             }
 
-            System.out.print("Ingresar la cantidad de personas: ");
+            System.out.println("Ingresar la cantidad de personas: ");
             int cantidadPersonas = scanner.nextInt();
 
-            System.out.print("Ingresar observaciones para la reserva: ");
+            System.out.println("Ingresar observaciones para la reserva: ");
             String descripciones = scanner.nextLine();
 
             if (cantidadPersonas > habitacionSeleccionada.getCapacidadCamas()) {

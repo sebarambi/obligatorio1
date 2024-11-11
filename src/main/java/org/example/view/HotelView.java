@@ -23,8 +23,6 @@ public class HotelView {
     PaisDAO paisDAO = new PaisDAO();
     List<Pais> paises = paisDAO.getAllPaises();
     CiudadDAO ciudadDAO = new CiudadDAO();
-    HotelDAO hotelDAO = new HotelDAO();
-    List<Hotel> todosLosHoteles = hotelDAO.listarHoteles();
     HabitacionDAO habitacionDAO = new HabitacionDAO();
 
     public HotelView() {
@@ -155,7 +153,9 @@ public class HotelView {
     }
 
     public void modificarHotel() {
-        listarHoteles(todosLosHoteles);
+        List<Hotel> hotelesAModificar = hotelController.listarHoteles();
+        listarHoteles(hotelesAModificar);
+
         System.out.println("Ingrese el ID del Hotel que desea modificar: ");
         int idAModificar = scanner.nextInt();
 
