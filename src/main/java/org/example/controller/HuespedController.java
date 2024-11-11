@@ -25,4 +25,7 @@ public class HuespedController {
     public List<Huesped> listarHuespedes() {
         return this.huespedDAO.listarHuespedes();
     }
+    public boolean modificarHuesped(Huesped habitacion) {
+        return huespedDAO.modificarHuesped(habitacion);
+    }
 }

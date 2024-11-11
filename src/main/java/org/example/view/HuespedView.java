@@ -1,9 +1,8 @@
 package org.example.view;
 
-import org.example.DAO.HuespedDAO;
-import org.example.DAO.PaisDAO;
-import org.example.DAO.TipoDocumentoDAO;
 import org.example.controller.HuespedController;
+import org.example.controller.PaisController;
+import org.example.controller.TipoDocumentoController;
 import org.example.model.Huesped;
 import org.example.model.Pais;
 import org.example.model.TipoDocumento;
@@ -17,17 +16,22 @@ import java.util.Scanner;
 public class HuespedView {
     private Scanner scanner = new Scanner(System.in);
     private HuespedController huespedController;
+    private PaisController paisController;
+    private TipoDocumentoController tipoDocumentoController;
 
-    PaisDAO paisDAO = new PaisDAO();
-    TipoDocumentoDAO tipoDocumentoDAO = new TipoDocumentoDAO();
-    HuespedDAO huespedDAO = new HuespedDAO();
-    List<Pais> paises = paisDAO.getAllPaises();
-    List<TipoDocumento> tipoDocumentos = tipoDocumentoDAO.listarTiposDocumento();
-    List<Huesped> todosLosHuespedes = huespedDAO.listarHuespedes();
+    List<Pais> paises;
+    List<TipoDocumento> tipoDocumentos;
 
 
     public HuespedView() {
+
         this.huespedController = new HuespedController();
+        this.paisController = new PaisController();
+        this.tipoDocumentoController = new TipoDocumentoController();
+
+        // Cargar los datos necesarios después de inicializar los controladores
+        this.paises = paisController.obtenerTodosLosPaises();
+        this.tipoDocumentos = tipoDocumentoController.listarTiposDocumento();
     }
 
     public void menuHuesped() {
@@ -48,7 +52,8 @@ public class HuespedView {
                     insertHuesped();
                     break;
                 case 2:
-                    listarHuespedes(todosLosHuespedes);
+                    List<Huesped> huespedesAListar = huespedController.listarHuespedes();
+                    listarHuespedes(huespedesAListar);
                     break;
                 case 3:
                     modificarHuesped();
@@ -69,7 +74,7 @@ public class HuespedView {
         scanner.close();
     }
 
-    //Metodos ---------------------------------------------------------------------------------------------------
+    // Métodos ---------------------------------------------------------------------------------------------------
 
     public void insertHuesped() {
         System.out.println("Ingrese los datos del huésped a continuación:");
@@ -165,39 +170,38 @@ public class HuespedView {
     }
 
     public void modificarHuesped() {
-        listarHuespedes(todosLosHuespedes);
+        List<Huesped> listaAModificar = huespedController.listarHuespedes();
+        listarHuespedes(listaAModificar);
         System.out.println("Ingrese el ID del Huesped que desea modificar: ");
         int idAModificar = scanner.nextInt();
 
         Huesped huesped = huespedController.getHuespedById(idAModificar);
 
-        // Si el huésped existe, procedemos con la modificación
         if (huesped != null) {
             System.out.println("Huesped encontrado: " + huesped.getNombre());
 
-            // Modificar nombre
+
             System.out.println("Ingrese nuevo nombre (deje en blanco para no modificar): ");
-            scanner.nextLine();  // Consumir salto de línea pendiente
+            scanner.nextLine();
             String nuevoNombre = scanner.nextLine();
             if (!nuevoNombre.isEmpty()) {
                 huesped.setNombre(nuevoNombre);
             }
 
-            // Modificar apellido paterno
+
             System.out.println("Ingrese nuevo apellido paterno (deje en blanco para no modificar): ");
             String nuevoAPaterno = scanner.nextLine();
             if (!nuevoAPaterno.isEmpty()) {
                 huesped.setaPaterno(nuevoAPaterno);
             }
 
-            // Modificar apellido materno
+
             System.out.println("Ingrese nuevo apellido materno (deje en blanco para no modificar): ");
             String nuevoAMaterno = scanner.nextLine();
             if (!nuevoAMaterno.isEmpty()) {
                 huesped.setaMaterno(nuevoAMaterno);
             }
 
-            // Modificar tipo de documento
             System.out.println("¿Desea modificar el tipo de documento? (S/N): ");
             String respuestaTipoDoc = scanner.nextLine();
             if (respuestaTipoDoc.equalsIgnoreCase("S")) {
@@ -206,7 +210,7 @@ public class HuespedView {
                     System.out.println("ID: " + tipo.getIdTipoDoc() + ", Nombre: " + tipo.getNombre());
                 }
                 int idTipoSeleccionado = scanner.nextInt();
-                scanner.nextLine();  // Consumir salto de línea pendiente
+                scanner.nextLine();
                 TipoDocumento tipoSeleccionado = null;
 
                 for (TipoDocumento tipo : tipoDocumentos) {
@@ -223,22 +227,18 @@ public class HuespedView {
                 }
             }
 
-            // Modificar número de documento
             System.out.println("Ingrese nuevo número de documento (deje en blanco para no modificar): ");
             String nuevoNumDocumento = scanner.nextLine();
             if (!nuevoNumDocumento.isEmpty()) {
                 huesped.setNumDocumento(nuevoNumDocumento);
             }
 
-
-            // Modificar teléfono
             System.out.println("Ingrese nuevo teléfono (deje en blanco para no modificar): ");
             String nuevoTelefono = scanner.nextLine();
             if (!nuevoTelefono.isEmpty()) {
                 huesped.setTelefono(nuevoTelefono);
             }
 
-            // Modificar país
             System.out.println("¿Desea modificar el país? (S/N): ");
             String respuestaPais = scanner.nextLine();
             if (respuestaPais.equalsIgnoreCase("S")) {
@@ -247,7 +247,7 @@ public class HuespedView {
                     System.out.println("ID: " + pais.getId() + ", Nombre: " + pais.getName());
                 }
                 int idPaisSeleccionado = scanner.nextInt();
-                scanner.nextLine();  // Consumir salto de línea pendiente
+                scanner.nextLine();
                 Pais paisSeleccionado = null;
 
                 for (Pais pais : paises) {
@@ -264,53 +264,31 @@ public class HuespedView {
                 }
             }
 
-            // Una vez modificado el objeto, lo pasamos al DAO para actualizarlo en la base de datos
-            boolean success = huespedDAO.modificarHuesped(huesped);
 
-            if (success) {
-                System.out.println("Huesped modificado correctamente.");
+            boolean huespedUpdated = huespedController.modificarHuesped(huesped);
+
+            if (huespedUpdated) {
+                System.out.println("Huésped modificado exitosamente!");
             } else {
-                System.out.println("Error al modificar el huésped.");
+                System.out.println("Ocurrió un error al modificar el huésped.");
             }
         } else {
-            System.out.println("Huesped no encontrado.");
+            System.out.println("No se encontró el huésped con el ID proporcionado.");
         }
     }
 
     public void eliminarHuesped() {
-        // Listar todos los huéspedes registrados
-        listarHuespedes(todosLosHuespedes);
-
-        System.out.println("Ingrese el ID del Huésped que desea eliminar: ");
+        List<Huesped> listaAEliminar = huespedController.listarHuespedes();
+        listarHuespedes(listaAEliminar);
+        System.out.println("Ingrese el ID del Huesped que desea eliminar: ");
         int idAEliminar = scanner.nextInt();
 
-        // Buscar el huésped por ID
-        Huesped huesped = huespedController.getHuespedById(idAEliminar);
+        boolean eliminado = huespedController.eliminarHuesped(idAEliminar);
 
-        // Si el huésped existe, proceder a eliminarlo
-        if (huesped != null) {
-            // Confirmar eliminación
-            System.out.println("Huésped encontrado: " + huesped.getNombre());
-            System.out.println("¿Está seguro de que desea eliminar este huésped? (s/n): ");
-            scanner.nextLine();  // Consumir el salto de línea pendiente
-            String confirmacion = scanner.nextLine();
-
-            if (confirmacion.equalsIgnoreCase("s")) {
-                // Eliminar huésped
-                boolean eliminado = huespedController.eliminarHuesped(idAEliminar);
-                if (eliminado) {
-                    System.out.println("Huésped eliminado exitosamente.");
-                } else {
-                    System.out.println("Ocurrió un error al eliminar al huésped.");
-                }
-            } else {
-                System.out.println("Eliminación cancelada.");
-            }
+        if (eliminado) {
+            System.out.println("Huésped eliminado exitosamente.");
         } else {
-            System.out.println("Huésped no encontrado.");
+            System.out.println("No se pudo eliminar el huésped con ID " + idAEliminar);
         }
     }
-
-
-
 }
