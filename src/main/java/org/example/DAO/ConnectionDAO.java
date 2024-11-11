@@ -27,7 +27,7 @@ public class ConnectionDAO {
             return rowsAffected > 0;
         } catch (SQLException ex) {
             System.out.println("Ocurrió un problema al conectarse con la base de datos.");
-            //ex.printStackTrace();
+
         }
         return false;
     }

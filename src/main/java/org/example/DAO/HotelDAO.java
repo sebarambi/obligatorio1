@@ -92,7 +92,7 @@ public class HotelDAO {
         try {
             ResultSet resultSet = connectionDAO.executeQuery(query, idHotel);
 
-            // Si hay un resultado, lo asignamos al objeto hotel
+
             if (resultSet.next()) {
                 String nombreHotel = resultSet.getString("nombreHotel");
                 int cantidadEstrellas = resultSet.getInt("cantidadEstrellas");
@@ -106,7 +106,7 @@ public class HotelDAO {
                 String nombreCiudad = resultSet.getString("nombreCiudad");
                 Ciudad ciudad = new Ciudad(idCiudad, nombreCiudad);
 
-                // Crear el objeto Hotel con los valores obtenidos
+
                 hotel = new Hotel(idHotel, nombreHotel, pais, ciudad, cantidadEstrellas, direccion);
             }
         } catch (SQLException ex) {
@@ -127,7 +127,7 @@ public class HotelDAO {
                 hotel.getCiudad().getIdCiudad(),
                 hotel.getCantidadEstrellas(),
                 hotel.getDireccion(),
-                hotel.getIdHotel()  // El ID del hotel es necesario para la condición WHERE
+                hotel.getIdHotel()
         );
     }
 
@@ -141,7 +141,7 @@ public class HotelDAO {
         String query = "SELECT h.idHotel, h.nombreHotel, h.direccion, h.cantidadEstrellas, " +
                 "h.idPais, h.idCiudad " +
                 "FROM Hotel h " +
-                "WHERE h.idCiudad = ?";  // Usamos ? para evitar SQL Injection
+                "WHERE h.idCiudad = ?";
 
         List<Hotel> hoteles = new ArrayList<>();
 
@@ -154,14 +154,13 @@ public class HotelDAO {
                 String nombreHotel = resultSet.getString("nombreHotel");
                 String direccion = resultSet.getString("direccion");
                 int cantidadEstrellas = resultSet.getInt("cantidadEstrellas");
-                int idPais = resultSet.getInt("idPais"); // Obtener el idPais de la consulta
-                int idCiudadDb = resultSet.getInt("idCiudad"); // Obtener el idCiudad
+                int idPais = resultSet.getInt("idPais");
+                int idCiudadDb = resultSet.getInt("idCiudad");
 
-                // Obtener el objeto Pais y Ciudad usando sus controladores
-                Pais pais = paisController.obtenerPaisPorId(idPais);  // Llamamos al método del PaisController
-                Ciudad ciudad = ciudadController.obtenerCiudadPorId(idCiudadDb);  // Llamamos al método del CiudadController
 
-                // Si se obtienen correctamente el Pais y Ciudad, creamos el objeto Hotel
+                Pais pais = paisController.obtenerPaisPorId(idPais);
+                Ciudad ciudad = ciudadController.obtenerCiudadPorId(idCiudadDb);
+
                 if (pais != null && ciudad != null) {
                     Hotel hotel = new Hotel(idHotel, nombreHotel, pais, ciudad, cantidadEstrellas, direccion);
                     hoteles.add(hotel);
@@ -181,7 +180,7 @@ public class HotelDAO {
         List<Hotel> hoteles = new ArrayList<>();
 
         try {
-            // Ejecutamos la consulta SQL
+
             ResultSet resultSet = connectionDAO.executeQuery(query, "%" + nombreHotel + "%");
 
             while (resultSet.next()) {
@@ -192,15 +191,15 @@ public class HotelDAO {
                 int idPais = resultSet.getInt("idPais");
                 int idCiudad = resultSet.getInt("idCiudad");
 
-                // Obtener el objeto Pais utilizando el idPais
+
                 Pais pais = paisController.obtenerPaisPorId(idPais);
 
-                // Obtener el objeto Ciudad utilizando el idCiudad
+
                 Ciudad ciudad = ciudadController.obtenerCiudadPorId(idCiudad);
 
-                // Crear un objeto Hotel con la información obtenida
+
                 Hotel hotel = new Hotel(idHotel, nombreHotel, pais, ciudad, cantidadEstrellas, direccion);
-                hoteles.add(hotel);  // Agregar el hotel a la lista
+                hoteles.add(hotel);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -214,7 +213,7 @@ public class HotelDAO {
         List<Hotel> hoteles = new ArrayList<>();
 
         try {
-            // Ejecutamos la consulta SQL
+
             ResultSet resultSet = connectionDAO.executeQuery(query, cantidadEstrellas);
 
             while (resultSet.next()) {
@@ -225,15 +224,15 @@ public class HotelDAO {
                 int idPais = resultSet.getInt("idPais");
                 int idCiudad = resultSet.getInt("idCiudad");
 
-                // Obtener el objeto Pais utilizando el idPais
+
                 Pais pais = paisController.obtenerPaisPorId(idPais);
 
-                // Obtener el objeto Ciudad utilizando el idCiudad
+
                 Ciudad ciudad = ciudadController.obtenerCiudadPorId(idCiudad);
 
-                // Crear un objeto Hotel con la información obtenida
+
                 Hotel hotel = new Hotel(idHotel, nombre, pais, ciudad, cantidadEstrellasSeleccionada, direccion);
-                hoteles.add(hotel);  // Agregar el hotel a la lista
+                hoteles.add(hotel);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();

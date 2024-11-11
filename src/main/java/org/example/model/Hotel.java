@@ -111,29 +111,10 @@ public class Hotel {
         System.out.println("Ciudad: " + getCiudad().getNombreCiudad());
         System.out.println("Cantidad de estrellas: " + getCantidadEstrellas());
         System.out.println("Direccion: " + getDireccion());
-        System.out.println();
-        if (getHabitaciones().isEmpty()) {
-            System.out.println("El hotel todavia no cuenta con habitaciones cargadas");
-        } else {
-            System.out.println("Las habitaciones del hotel son: ");
-            for (Habitacion habitacion : getHabitaciones()) {
-                System.out.println("---------------------------------------------------------------------");
-                habitacion.mostrarInformacion();
-                System.out.println("---------------------------------------------------------------------");
-
-            }
-        }
-    }
-
-    public void mostrarInformacionSinHab() {
-        System.out.println("ID: " + getIdHotel());
-        System.out.println("Nombre: " + getNombreHotel());
-        System.out.println("Pais: " + getPais().getName());
-        System.out.println("Ciudad: " + getCiudad().getNombreCiudad());
-        System.out.println("Cantidad de estrellas: " + getCantidadEstrellas());
-        System.out.println("Direccion: " + getDireccion());
-        System.out.println("<====================================================================>");
+        System.out.println("================================================================");
 
     }
+
+
 }
 

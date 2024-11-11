@@ -98,7 +98,6 @@ public class HuespedDAO {
 
             ResultSet resultSet = connectionDAO.executeQuery(query, idHuesped);
 
-            // Si hay un resultado, lo asignamos al objeto huesped
             if (resultSet.next()) {
                 String nombre = resultSet.getString("nombre");
                 String aPaterno = resultSet.getString("aPaterno");
@@ -115,7 +114,6 @@ public class HuespedDAO {
                 String descripcionTipoDoc = resultSet.getString("nombre");
                 TipoDocumento tipoDocumento = new TipoDocumento(idTipoDocumento, descripcionTipoDoc);
 
-                // Crear el objeto Huesped con los valores obtenidos
                 huesped = new Huesped(idHuesped, nombre, aPaterno, aMaterno, tipoDocumento, numDocumento, fechaNacimiento, telefono, pais);
             }
         } catch (SQLException ex) {
@@ -139,9 +137,10 @@ public class HuespedDAO {
                 huesped.getFechaNacimiento(),
                 huesped.getTelefono(),
                 huesped.getPais().getId(),
-                huesped.getIdHuesped()  // El ID del huésped es necesario para la condición WHERE
+                huesped.getIdHuesped()
         );
     }
+
     public boolean eliminarHuesped(int idHuesped) {
         String query = "DELETE FROM Huesped WHERE idHuesped = ?";
 
@@ -153,11 +152,10 @@ public class HuespedDAO {
         List<Huesped> huespedes = new ArrayList<>();
 
         try {
-            // Ejecutamos la consulta
             ResultSet resultSet = connectionDAO.executeQuery(query);
 
             while (resultSet.next()) {
-                // Obtener los valores de la base de datos
+
                 int idHuesped = resultSet.getInt("idHuesped");
                 String nombre = resultSet.getString("nombre");
                 String aPaterno = resultSet.getString("aPaterno");
@@ -168,11 +166,9 @@ public class HuespedDAO {
                 String telefono = resultSet.getString("telefono");
                 int idPais = resultSet.getInt("idPais");
 
-                // Obtener los detalles de TipoDocumento y Pais mediante las controladoras
                 TipoDocumento tipoDocumento = tipoDocumentoController.getTipoDocumentoById(idTipoDoc);
                 Pais pais = paisController.obtenerPaisPorId(idPais);
 
-                // Crear el objeto Huesped
                 Huesped huesped = new Huesped(
                         idHuesped,
                         nombre,
@@ -185,18 +181,14 @@ public class HuespedDAO {
                         pais
                 );
 
-                // Agregar el huesped a la lista
                 huespedes.add(huesped);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
-        // Retornar la lista de huespedes
         return huespedes;
     }
-
-
 
 
 }

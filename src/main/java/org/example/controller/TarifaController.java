@@ -16,12 +16,10 @@ public class TarifaController {
         tarifaDAO = new TarifaDAO();
     }
 
-    // Método para obtener Tarifa por ID
     public Tarifa getTarifaById(int idTarifa) {
         return tarifaDAO.getTarifaById(idTarifa);
     }
 
-    // Método para obtener todas las Tarifas
     public List<Tarifa> getAllTarifas() {
         return tarifaDAO.getAllTarifas();
     }

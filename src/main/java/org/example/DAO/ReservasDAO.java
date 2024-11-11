@@ -49,8 +49,8 @@ public class ReservasDAO {
                 reserva.getFechaFin(),
                 reserva.getCantidadPersonas(),
                 reserva.getObservaciones(),
-                reserva.getHuesped().getIdHuesped(),  // El ID del huésped es necesario para la condición WHERE
-                reserva.getIdReserva()  // El ID de la reserva es necesario para la condición WHERE
+                reserva.getHuesped().getIdHuesped(),
+                reserva.getIdReserva()
         );
     }
 
@@ -64,10 +64,8 @@ public class ReservasDAO {
         Reservas reserva = null;
 
         try {
-            // Ejecutar la consulta y obtener el ResultSet
             ResultSet resultSet = connectionDAO.executeQuery(query, idReserva);
 
-            // Si hay un resultado, lo asignamos al objeto reserva
             if (resultSet.next()) {
                 int id = resultSet.getInt("idReserva");
                 int idHuesped = resultSet.getInt("idHuesped");
@@ -77,10 +75,8 @@ public class ReservasDAO {
                 String observaciones = resultSet.getString("observaciones");
                 Date fechaReserva = resultSet.getDate("fechaReserva");
 
-                // Obtener el Huesped usando el idHuesped
                 Huesped huesped = huespedController.getHuespedById(idHuesped);
 
-                // Crear el objeto Reserva con los valores obtenidos
                 reserva = new Reservas(huesped, fechaInicio, fechaFin, cantidadPersonas, observaciones);
             }
         } catch (SQLException ex) {
@@ -99,10 +95,8 @@ public class ReservasDAO {
         List<Reservas> reservasList = new ArrayList<>();
 
         try {
-            // Ejecutar la consulta y obtener el ResultSet
             ResultSet resultSet = connectionDAO.executeQuery(query, idHuesped);
 
-            // Iterar sobre los resultados y añadir cada reserva a la lista
             while (resultSet.next()) {
                 int idReserva = resultSet.getInt("idReserva");
                 Date fechaInicio = resultSet.getDate("fechaInicio");
@@ -111,10 +105,8 @@ public class ReservasDAO {
                 String observaciones = resultSet.getString("observaciones");
                 Date fechaReserva = resultSet.getDate("fechaReserva");
 
-                // Obtener el Huesped usando el idHuesped
                 Huesped huesped = huespedController.getHuespedById(idHuesped);
 
-                // Crear el objeto Reserva con los valores obtenidos y añadirlo a la lista
                 Reservas reserva = new Reservas(idReserva,huesped,fechaInicio,fechaFin,cantidadPersonas,observaciones,fechaReserva);
                 reservasList.add(reserva);
             }

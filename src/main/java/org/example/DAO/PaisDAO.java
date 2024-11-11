@@ -25,7 +25,6 @@ public class PaisDAO {
                 int id = resultSet.getInt("idPais");
                 String nombre = resultSet.getString("nombrePais");
 
-                // Crear el objeto Pais y agregarlo a la lista
                 Pais pais = new Pais(id, nombre);
                 paises.add(pais);
             }
@@ -46,7 +45,6 @@ public class PaisDAO {
                 int id = resultSet.getInt("idPais");
                 String nombrePais = resultSet.getString("nombrePais");
 
-                // Crear el objeto Pais con los valores obtenidos
                 pais = new Pais(id, nombrePais);
             }
         } catch (SQLException ex) {

@@ -24,19 +24,15 @@ public class TipoHabitacionDAO {
         TipoHabitacion tipoHabitacion = null;
 
         try {
-            // Ejecutamos la consulta pasando el idTipo como parámetro
             ResultSet resultSet = connectionDAO.executeQuery(query, idTipo);
 
-            // Si encontramos el resultado, lo asignamos al objeto tipoHabitacion
             if (resultSet.next()) {
                 int id = resultSet.getInt("idTipoHab");
                 String descripcion = resultSet.getString("descripcion");
                 int idTarifa = resultSet.getInt("idTarifa");
 
-                // Aquí obtenemos la tarifa usando el idTarifa
-                Tarifa tarifa = tarifaController.getTarifaById(idTarifa);  // Asegúrate de tener este método en tu TarifaDAO
+                Tarifa tarifa = tarifaController.getTarifaById(idTarifa);
 
-                // Creamos el objeto TipoHabitacion con los datos obtenidos y la tarifa
                 tipoHabitacion = new TipoHabitacion(id, descripcion, tarifa);
             }
         } catch (SQLException ex) {
@@ -58,18 +54,14 @@ public class TipoHabitacionDAO {
             ResultSet resultSet = connectionDAO.executeQuery(query);
 
             while (resultSet.next()) {
-                // Recuperar datos de TipoHabitacion
                 int idTipoHabitacion = resultSet.getInt("idTipoHab");
                 String descripcion = resultSet.getString("descripcion");
 
-                // Recuperar datos de Tarifa
                 int idTarifa = resultSet.getInt("idTarifa");
                 int monto = resultSet.getInt("monto");
 
-                // Crear el objeto Tarifa
                 Tarifa tarifa = new Tarifa(idTarifa, monto);
 
-                // Crear el objeto TipoHabitacion y asignar la tarifa
                 TipoHabitacion tipoHabitacion = new TipoHabitacion(idTipoHabitacion, descripcion, tarifa);
                 tipoHabitaciones.add(tipoHabitacion);
             }
