@@ -79,7 +79,6 @@ public class Ocupaciones {
     }
 
     //Constructor
-
     public Ocupaciones(int idOcupacion, Habitacion habitacion, Reservas reservas, Huesped huesped, Date fechaENtrada, Date fechaSalida, boolean reservadoSistema, int precio) {
         this.idOcupacion = idOcupacion;
         this.habitacion = habitacion;
@@ -88,7 +87,7 @@ public class Ocupaciones {
         this.fechaEntrada = fechaENtrada;
         this.fechaSalida = fechaSalida;
         this.reservadoSistema = reservadoSistema;
-        this.precio = precio;
+        this.precio = calcularPrecioTotal();
     }
 
     public int calcularDiasEstancia() {
@@ -97,5 +96,10 @@ public class Ocupaciones {
 
         // Convertir milisegundos a días y redondear el valor a int
         return (int) (diferenciaMillis / (1000 * 60 * 60 * 24)); // 1000ms * 60s * 60m * 24h
+    }
+    private int calcularPrecioTotal() {
+        int diasEstancia = calcularDiasEstancia();
+        int montoTarifa = this.habitacion.getTipoHabitacion().getTarifa().getMonto();
+        return diasEstancia * montoTarifa;
     }
 }

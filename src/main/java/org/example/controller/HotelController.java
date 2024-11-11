@@ -28,6 +28,9 @@ public class HotelController {
     public boolean modificarHotel(Hotel hotel) {
         return hotelDAO.modificarHotel(hotel);
     }
+    public boolean eliminarHotel(int id) {
+        return this.hotelDAO.eliminarHotel(id);
+    }
 
     public List<Hotel> obtenerHotelesPorCiudad(int idCiudad) {
         return hotelDAO.obtenerHotelesPorCiudad(idCiudad);

@@ -22,6 +22,14 @@ public class TipoHabitacion {
         this.descripcion = descripcion;
     }
 
+    public Tarifa getTarifa() {
+        return tarifa;
+    }
+
+    public void setTarifa(Tarifa tarifa) {
+        this.tarifa = tarifa;
+    }
+
     //Constructor
 
     public TipoHabitacion(int idTipoHabitacion, String descripcion, Tarifa tarifa) {

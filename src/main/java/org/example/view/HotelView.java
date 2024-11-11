@@ -44,7 +44,7 @@ public class HotelView {
             System.out.print("Seleccione una opción: ");
 
             opcion = scanner.nextInt();
-            scanner.nextLine(); // Limpiar el buffer
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
@@ -52,7 +52,8 @@ public class HotelView {
                     break;
 
                 case 2:
-                    listarHoteles(todosLosHoteles);
+                    List<Hotel> hotelesAListar = hotelController.listarHoteles();
+                    listarHoteles(hotelesAListar);
                     break;
 
                 case 3:
@@ -73,19 +74,17 @@ public class HotelView {
         } while (opcion != 5);
     }
 
-    //Metodos-------------------------------------------------------------------------------------------------
 
     public void insertHotel() {
         System.out.println("Ingrese los datos del hotel a continuación:");
 
         System.out.print("Ingrese el ID del hotel: ");
         int idHotel = scanner.nextInt();
-        scanner.nextLine(); // Limpiar el buffer
+        scanner.nextLine();
 
         System.out.print("Ingrese el nombre del hotel: ");
         String nombreHotel = scanner.nextLine();
 
-        // Selección de País
         System.out.println("Seleccione el país:");
         for (Pais pais : paises) {
             System.out.println("ID: " + pais.getId() + ", Nombre: " + pais.getName());
@@ -134,10 +133,8 @@ public class HotelView {
         System.out.print("Ingrese la dirección del hotel: ");
         String direccion = scanner.nextLine();
 
-        // Crear el objeto Hotel con los datos ingresados
         Hotel hotel = new Hotel(idHotel, nombreHotel, paisSeleccionado, ciudadSeleccionada, cantidadEstrellas, direccion);
 
-        // Llamar al controlador para insertar el hotel
         boolean hotelInserted = this.hotelController.insertHotel(hotel);
 
         if (hotelInserted) {
@@ -148,7 +145,7 @@ public class HotelView {
     }
 
     public void listarHoteles(List<Hotel> lista) {
-        System.out.println("Los huespedes que se encuentran registrados en el sistema son: ");
+        System.out.println("Los Hoteles que se encuentran en el sistema son: ");
         for (Hotel hotel : lista) {
             System.out.println("-------------------------------------------------");
             hotel.mostrarInformacion();
@@ -164,11 +161,11 @@ public class HotelView {
 
         Hotel hotel = hotelController.getHotelById(idAModificar);
 
-        // Si el hotel existe, procedemos con la modificación
+
         if (hotel != null) {
             System.out.println("Hotel encontrado: " + hotel.getNombreHotel());
 
-            // Modificar nombre del hotel
+
             System.out.println("Ingrese nuevo nombre del hotel (deje en blanco para no modificar): ");
             scanner.nextLine();  // Consumir salto de línea pendiente
             String nuevoNombre = scanner.nextLine();
@@ -176,7 +173,7 @@ public class HotelView {
                 hotel.setNombreHotel(nuevoNombre);
             }
 
-            // Modificar país
+
             System.out.println("¿Desea modificar el país? (S/N): ");
             String respuestaPais = scanner.nextLine();
             if (respuestaPais.equalsIgnoreCase("S")) {
@@ -185,7 +182,7 @@ public class HotelView {
                     System.out.println("ID: " + pais.getId() + ", Nombre: " + pais.getName());
                 }
                 int idPaisSeleccionado = scanner.nextInt();
-                scanner.nextLine();  // Consumir salto de línea pendiente
+                scanner.nextLine();
                 Pais paisSeleccionado = null;
 
                 for (Pais pais : paises) {
@@ -202,7 +199,7 @@ public class HotelView {
                 }
             }
 
-            // Modificar ciudad
+
             System.out.println("¿Desea modificar la ciudad? (S/N): ");
             String respuestaCiudad = scanner.nextLine();
             if (respuestaCiudad.equalsIgnoreCase("S")) {
@@ -212,7 +209,7 @@ public class HotelView {
                     System.out.println("ID: " + ciudad.getIdCiudad() + ", Nombre: " + ciudad.getNombreCiudad());
                 }
                 int idCiudadSeleccionada = scanner.nextInt();
-                scanner.nextLine();  // Consumir salto de línea pendiente
+                scanner.nextLine();
                 Ciudad ciudadSeleccionada = null;
 
                 for (Ciudad ciudad : ciudades) {
@@ -229,7 +226,7 @@ public class HotelView {
                 }
             }
 
-            // Modificar cantidad de estrellas
+
             System.out.println("Ingrese nueva cantidad de estrellas (deje en blanco para no modificar): ");
             String estrellasInput = scanner.nextLine();
             if (!estrellasInput.isEmpty()) {
@@ -237,14 +234,14 @@ public class HotelView {
                 hotel.setCantidadEstrellas(nuevaCantidadEstrellas);
             }
 
-            // Modificar dirección
+
             System.out.println("Ingrese nueva dirección (deje en blanco para no modificar): ");
             String nuevaDireccion = scanner.nextLine();
             if (!nuevaDireccion.isEmpty()) {
                 hotel.setDireccion(nuevaDireccion);
             }
 
-            // Una vez modificado el objeto, lo pasamos al DAO para actualizarlo en la base de datos
+
             boolean success = hotelController.modificarHotel(hotel);
 
             if (success) {
@@ -258,28 +255,26 @@ public class HotelView {
     }
 
     public void eliminarHotel() {
-        // Listar todos los hoteles registrados
-        listarHoteles(todosLosHoteles);
+        List<Hotel> hotelesAEliminar = hotelController.listarHoteles();
+        listarHoteles(hotelesAEliminar);
 
         System.out.println("Ingrese el ID del Hotel que desea eliminar: ");
         int idAEliminar = scanner.nextInt();
 
-        // Buscar el hotel por ID
-        Hotel hotel = hotelDAO.getHotelById(idAEliminar);
 
-        // Si el hotel existe, proceder a eliminarlo
+        Hotel hotel = hotelController.getHotelById(idAEliminar);
+
+
         if (hotel != null) {
-            // Confirmar eliminación
             System.out.println("Hotel encontrado: " + hotel.getNombreHotel());
             System.out.println("¿Está seguro de que desea eliminar este hotel? (s/n): ");
-            scanner.nextLine();  // Consumir el salto de línea pendiente
+            scanner.nextLine();
             String confirmacion = scanner.nextLine();
 
             if (confirmacion.equalsIgnoreCase("s")) {
-                // Eliminar hotel
                 List<Habitacion> habitacionesHotelAEliminar = habitacionDAO.listarHabitacionesPorIdHotel(hotel.getIdHotel());
                 if (habitacionesHotelAEliminar.isEmpty()) {
-                    boolean eliminado = hotelDAO.eliminarHotel(idAEliminar);
+                    boolean eliminado = hotelController.eliminarHotel(idAEliminar);
                     if (eliminado) {
                         System.out.println("Hotel eliminado exitosamente.");
                     } else {
