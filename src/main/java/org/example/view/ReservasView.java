@@ -9,6 +9,7 @@ import org.example.model.Hotel;
 import org.example.model.Huesped;
 import org.example.model.Reservas;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -32,8 +33,9 @@ public class ReservasView {
         do {
 
             System.out.println("Menú de Reservas:");
-            System.out.println("1. Reserva de habitaciones por un período de tiempo.");
-            System.out.println("2. Filtrar habitaciones con y sin reserva.");
+            System.out.println("1. Reserva de habitaciones.");
+            System.out.println("2. Modificar reservas.");
+            System.out.println("3. Salir.");
             System.out.println("0. Salir.");
             System.out.print("Seleccione una opción: ");
 
@@ -45,7 +47,10 @@ public class ReservasView {
                     insertarReserva();
                     break;
                 case 2:
-                    //filtrarHabitaciones();
+                    modificarReserva();
+                    break;
+                case 3:
+
                     break;
                 case 0:
                     System.out.println("Saliendo del sistema...");
@@ -144,6 +149,9 @@ public class ReservasView {
             System.out.print("Ingresar la cantidad de personas: ");
             int cantidadPersonas = scanner.nextInt();
 
+            System.out.print("Ingresar la cantidad de personas: ");
+            String descripciones = scanner.nextLine();
+
             // Validar que la cantidad de personas no exceda la capacidad de la habitación
             if (cantidadPersonas > habitacionSeleccionada.getCapacidadCamas()) {
                 System.out.println("La cantidad de personas excede la capacidad de la habitación seleccionada.");
@@ -154,7 +162,7 @@ public class ReservasView {
             }
 
             // Crear y registrar la reserva
-            Reservas reserva = new Reservas(huespedSeleccionado, fechaInicio, fechaFin, cantidadPersonas);
+            Reservas reserva = new Reservas(huespedSeleccionado, fechaInicio, fechaFin, cantidadPersonas, "");
             boolean reservaInserted = reservasController.insertarReserva(reserva);
 
             // Confirmar si la reserva fue ingresada correctamente
@@ -169,5 +177,107 @@ public class ReservasView {
             e.printStackTrace();
         }
     }
+
+    public void modificarReserva() {
+        // Paso 1: Solicitar el ID del huésped para ver sus reservas
+        System.out.println("Ingrese el ID del huésped para ver sus reservas: ");
+        int idHuesped = scanner.nextInt();
+
+        // Validación de que el huésped existe
+        Huesped huesped = huespedController.getHuespedById(idHuesped);
+        if (huesped == null) {
+            System.out.println("El huésped con ID " + idHuesped + " no existe.");
+            return; // Si el huésped no existe, salir del método
+        }
+
+        // Paso 2: Obtener las reservas del huésped
+        List<Reservas> reservas = reservasController.obtenerReservasPorIdHuesped(idHuesped);
+
+        if (reservas.isEmpty()) {
+            System.out.println("El huésped no tiene reservas.");
+            return;
+        }
+
+        // Paso 3: Listar las reservas del huésped
+        System.out.println("Reservas del huésped ID " + idHuesped + ":");
+        for (Reservas reserva : reservas) {
+            System.out.println("ID Reserva: " + reserva.getIdReserva() + ", Fecha Inicio: " + reserva.getFechaInicio() + ", Fecha Fin: " + reserva.getFechaFin() + ", Cantidad Personas: " + reserva.getCantidadPersonas());
+        }
+
+        // Paso 4: Solicitar al usuario que ingrese el ID de la reserva que desea modificar
+        System.out.println("Ingrese el ID de la reserva que desea modificar: ");
+        int idReservaAModificar = scanner.nextInt();
+
+        // Paso 5: Buscar la reserva por ID
+        Reservas reserva = reservasController.obtenerReservaPorId(idReservaAModificar);
+
+        // Paso 6: Verificar si la reserva existe
+        if (reserva != null) {
+            System.out.println("Reserva encontrada: ");
+            System.out.println("ID Reserva: " + reserva.getIdReserva() + ", Fecha Inicio: " + reserva.getFechaInicio() + ", Fecha Fin: " + reserva.getFechaFin() + ", Cantidad Personas: " + reserva.getCantidadPersonas());
+
+            // Paso 7: Modificar la fecha de inicio de la reserva
+            System.out.println("¿Desea modificar la fecha de inicio? (S/N): ");
+            scanner.nextLine(); // Consumir salto de línea pendiente
+            String respuestaInicio = scanner.nextLine();
+            if (respuestaInicio.equalsIgnoreCase("S")) {
+                System.out.println("Ingrese la nueva fecha de inicio (yyyy-mm-dd): ");
+                String fechaInicioStr = scanner.nextLine();
+                try {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Date nuevaFechaInicio = dateFormat.parse(fechaInicioStr);
+                    reserva.setFechaInicio(nuevaFechaInicio);
+                } catch (ParseException e) {
+                    System.out.println("Fecha inválida.");
+                }
+            }
+
+            // Paso 8: Modificar la fecha de fin de la reserva
+            System.out.println("¿Desea modificar la fecha de fin? (S/N): ");
+            String respuestaFin = scanner.nextLine();
+            if (respuestaFin.equalsIgnoreCase("S")) {
+                System.out.println("Ingrese la nueva fecha de fin (yyyy-mm-dd): ");
+                String fechaFinStr = scanner.nextLine();
+                try {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Date nuevaFechaFin = dateFormat.parse(fechaFinStr);
+                    reserva.setFechaFin(nuevaFechaFin);
+                } catch (ParseException e) {
+                    System.out.println("Fecha inválida.");
+                }
+            }
+
+            // Paso 9: Modificar la cantidad de personas de la reserva
+            System.out.println("¿Desea modificar la cantidad de personas? (S/N): ");
+            String respuestaCantidadPersonas = scanner.nextLine();
+            if (respuestaCantidadPersonas.equalsIgnoreCase("S")) {
+                System.out.println("Ingrese la nueva cantidad de personas: ");
+                int nuevaCantidadPersonas = scanner.nextInt();
+                reserva.setCantidadPersonas(nuevaCantidadPersonas);
+            }
+
+            // Paso 10: Modificar las observaciones de la reserva
+            System.out.println("¿Desea modificar las observaciones? (S/N): ");
+            scanner.nextLine(); // Consumir salto de línea pendiente
+            String respuestaObservaciones = scanner.nextLine();
+            if (respuestaObservaciones.equalsIgnoreCase("S")) {
+                System.out.println("Ingrese las nuevas observaciones: ");
+                String nuevasObservaciones = scanner.nextLine();
+                reserva.setObservaciones(nuevasObservaciones);
+            }
+
+            // Paso 11: Una vez modificada la reserva, la pasamos al DAO para actualizarla en la base de datos
+            boolean success = reservasController.modificarReserva(reserva);
+
+            if (success) {
+                System.out.println("Reserva modificada correctamente.");
+            } else {
+                System.out.println("Error al modificar la reserva.");
+            }
+        } else {
+            System.out.println("Reserva no encontrada.");
+        }
+    }
+
 
 }

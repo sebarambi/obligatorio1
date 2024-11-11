@@ -1,16 +1,37 @@
 package org.example.controller;
 
 import org.example.DAO.ReservasDAO;
-import org.example.model.Hotel;
 import org.example.model.Reservas;
 
-public class ReservasController {
-    private ReservasDAO reservasDAO = new ReservasDAO();
+import java.util.List;
 
+public class ReservasController {
+    // Ya se instancia en la declaración de la variable
+    private ReservasDAO reservasDAO;
+
+    // Constructor sin la instancia redundante de ReservasDAO
     public ReservasController() {
-        this.reservasDAO = new ReservasDAO();
+        // La instanciación debería hacerse solo una vez, y puede pasarse por un constructor o configurarse en otro lugar si es necesario
+        reservasDAO = new ReservasDAO();
     }
-    public boolean insertarReserva(Reservas reservas) {
-        return this.reservasDAO.insertReserva(reservas);
+
+    // Método para insertar una nueva reserva
+    public boolean insertarReserva(Reservas reserva) {
+        return reservasDAO.insertReserva(reserva);
+    }
+
+    // Obtener una reserva por ID
+    public Reservas obtenerReservaPorId(int idReserva) {
+        return reservasDAO.getReservaById(idReserva);
+    }
+
+    // Obtener todas las reservas de un huésped por ID
+    public List<Reservas> obtenerReservasPorIdHuesped(int idHuesped) {
+        return reservasDAO.getReservasByIdHuesped(idHuesped);
+    }
+
+    // Modificar una reserva
+    public boolean modificarReserva(Reservas reserva) {
+        return reservasDAO.modificarReserva(reserva);  // Delegamos al DAO para hacer el update
     }
 }
