@@ -90,7 +90,7 @@ public class Reservas {
         this.fechaFin = fechaFin;
         this.cantidadPersonas = cantidadPersonas;
         this.observaciones = observaciones;
-        this.fechaReserva = new Date();  // Esto obtiene la fecha y hora actuales
+        this.fechaReserva = new Date();
     }
 
     public Reservas(int idReserva, Huesped huesped, Date fechaInicio, Date fechaFin, int cantidadPersonas, String observaciones, Date fechaReserva) {

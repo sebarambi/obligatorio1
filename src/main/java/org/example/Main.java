@@ -55,7 +55,7 @@ public class Main {
 
             System.out.println();
 
-        } while (option != 5);
+        } while (option != 6);
 
         scanner.close();
     }

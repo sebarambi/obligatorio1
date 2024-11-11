@@ -91,10 +91,8 @@ public class Ocupaciones {
     }
 
     public int calcularDiasEstancia() {
-        // Calcular la diferencia en milisegundos
         long diferenciaMillis = fechaSalida.getTime() - fechaEntrada.getTime();
 
-        // Convertir milisegundos a días y redondear el valor a int
         return (int) (diferenciaMillis / (1000 * 60 * 60 * 24)); // 1000ms * 60s * 60m * 24h
     }
     private int calcularPrecioTotal() {
