@@ -202,14 +202,13 @@ public class HabitacionDAO {
                 "h.balcon, h.idTipoHab, h.idHotel " +
                 "FROM Habitacion h " +
                 "WHERE h.idHabitacion NOT IN (" +
-                "    SELECT hr.idHabitacion " +
-                "    FROM HabitacionReserva hr " +
-                "    INNER JOIN Reservas r ON hr.idReserva = r.idReserva " +
-                "    WHERE (r.fechaInicio BETWEEN ? AND ? OR r.fechaFin BETWEEN ? AND ?) " +
+                "    SELECT r.idHabitacion " +
+                "    FROM Reservas r " +
+                "    WHERE (r.fechaInicio BETWEEN ? AND ? OR r.fechaFin BETWEEN ? AND ?)" +
                 ") AND h.idHabitacion NOT IN (" +
                 "    SELECT o.idHabitacion " +
                 "    FROM Ocupaciones o " +
-                "    WHERE (o.fecha_entrada BETWEEN ? AND ? OR o.fecha_salida BETWEEN ? AND ?) " +
+                "    WHERE (o.fecha_entrada BETWEEN ? AND ? OR o.fecha_salida BETWEEN ? AND ?)" +
                 ")";
 
         List<Habitacion> habitacionesDisponibles = new ArrayList<>();
