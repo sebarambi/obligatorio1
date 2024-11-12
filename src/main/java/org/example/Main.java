@@ -18,7 +18,7 @@ public class Main {
             System.out.println("3. Administracion de Habitaciones");
             System.out.println("4. Consultas sobre Hoteles");
             System.out.println("5. Reservas");
-            System.out.println("5. Salir");
+            System.out.println("6. Salir");
             System.out.print("Seleccione una opción: ");
 
             option = scanner.nextInt();

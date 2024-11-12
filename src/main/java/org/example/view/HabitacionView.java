@@ -34,7 +34,7 @@ public class HabitacionView {
             System.out.println("Opción 2: Ver todas las Habitaciones");
             System.out.println("Opción 3: Modificar Habitación por ID");
             System.out.println("Opción 4: Eliminar Habitación por ID");
-            System.out.println("Opción 5: Salir");
+            System.out.println("Opción 0: Salir");
             System.out.print("Selecciona una opción: ");
             opcion = scanner.nextInt();
             scanner.nextLine();
@@ -60,7 +60,7 @@ public class HabitacionView {
                     System.out.println("Opción no válida. Intenta de nuevo.");
                     break;
             }
-        } while (opcion != 5); // Repite el menú hasta que el usuario elija salir
+        } while (opcion != 0); //
     }
 
     public void insertHabitacion() {

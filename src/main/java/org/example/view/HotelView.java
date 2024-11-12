@@ -33,12 +33,12 @@ public class HotelView {
         int opcion;
 
         do {
-            System.out.println("\n--- Menú de Gestión de Hoteles ---");
+            System.out.println("===== MENU DE HOTELES =====");
             System.out.println("1. Crear nuevo hotel");
             System.out.println("2. Listar hoteles existentes");
             System.out.println("3. Actualizar hotel");
             System.out.println("4. Eliminar hotel");
-            System.out.println("5. Salir");
+            System.out.println("0. Salir");
             System.out.print("Seleccione una opción: ");
 
             opcion = scanner.nextInt();
@@ -62,14 +62,14 @@ public class HotelView {
                     eliminarHotel();
                     break;
 
-                case 5:
+                case 0:
                     System.out.println("Saliendo del menú de gestión de hoteles...");
                     break;
 
                 default:
                     System.out.println("Opción no válida. Por favor, seleccione una opción del 1 al 5.");
             }
-        } while (opcion != 5);
+        } while (opcion != 0);
     }
 
 

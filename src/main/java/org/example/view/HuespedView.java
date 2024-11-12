@@ -43,7 +43,7 @@ public class HuespedView {
             System.out.println("Opción 2: Ver todos los Huespedes");
             System.out.println("Opción 3: Modificar Huesped por ID");
             System.out.println("Opción 4: Eliminar Huesped por ID");
-            System.out.println("Salir");
+            System.out.println("Opción 0: Salir");
             System.out.print("Selecciona una opción: ");
             opcion = scanner.nextInt();
 
@@ -69,9 +69,7 @@ public class HuespedView {
                     System.out.println("Opción no válida. Intenta de nuevo.");
                     break;
             }
-        } while (opcion != 5); // Repite el menú hasta que el usuario elija salir
-
-        scanner.close();
+        } while (opcion != 0);
     }
 
     // Métodos ---------------------------------------------------------------------------------------------------
