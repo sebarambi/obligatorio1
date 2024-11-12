@@ -34,7 +34,6 @@ public class ReservasView {
 
             System.out.println("Menú de Reservas:");
             System.out.println("1. Reserva de habitaciones.");
-            System.out.println("2. Modificar reservas.");
             System.out.println("3. Eliminar reservas.");
             System.out.println("0. Salir.");
             System.out.print("Seleccione una opción: ");
@@ -47,9 +46,6 @@ public class ReservasView {
                     insertarReserva();
                     break;
                 case 2:
-                    modificarReserva();
-                    break;
-                case 3:
                     eliminarReserva();
                     break;
                 case 0:
@@ -143,7 +139,7 @@ public class ReservasView {
             String descripciones = scanner.nextLine();
 
             if (cantidadPersonas > habitacionSeleccionada.getCapacidadCamas()) {
-                System.out.println("La cantidad de personas excede la capacidad de la habitación seleccionada.");
+                System.out.println("La cantidad de personas excede la capacidad de Camas de la habitación seleccionada.");
                 return;
             } else if (cantidadPersonas <= 0) {
                 System.out.println("La cantidad de personas debe ser mayor que cero.");
@@ -162,93 +158,6 @@ public class ReservasView {
         } catch (Exception e) {
             System.out.println("Hubo un error al procesar las fechas o la reserva. Por favor, intente nuevamente.");
             e.printStackTrace();
-        }
-    }
-
-    public void modificarReserva() {
-        System.out.println("Ingrese el ID del huésped para ver sus reservas: ");
-        int idHuesped = scanner.nextInt();
-
-        Huesped huesped = huespedController.getHuespedById(idHuesped);
-        if (huesped == null) {
-            System.out.println("El huésped con ID " + idHuesped + " no existe.");
-            return;
-        }
-        List<Reservas> reservas = reservasController.obtenerReservasPorIdHuesped(idHuesped);
-
-        if (reservas.isEmpty()) {
-            System.out.println("El huésped no tiene reservas.");
-            return;
-        }
-        System.out.println("Reservas del huésped ID " + idHuesped + ":");
-        for (Reservas reserva : reservas) {
-            System.out.println("ID Reserva: " + reserva.getIdReserva() + ", Fecha Inicio: " + reserva.getFechaInicio() + ", Fecha Fin: " + reserva.getFechaFin() + ", Cantidad Personas: " + reserva.getCantidadPersonas());
-        }
-        System.out.println("Ingrese el ID de la reserva que desea modificar: ");
-        int idReservaAModificar = scanner.nextInt();
-
-        Reservas reserva = reservasController.obtenerReservaPorId(idReservaAModificar);
-
-        if (reserva != null) {
-            System.out.println("Reserva encontrada: ");
-            System.out.println("ID Reserva: " + reserva.getIdReserva() + ", Fecha Inicio: " + reserva.getFechaInicio() + ", Fecha Fin: " + reserva.getFechaFin() + ", Cantidad Personas: " + reserva.getCantidadPersonas());
-
-            System.out.println("¿Desea modificar la fecha de inicio? (S/N): ");
-            scanner.nextLine();
-            String respuestaInicio = scanner.nextLine();
-            if (respuestaInicio.equalsIgnoreCase("S")) {
-                System.out.println("Ingrese la nueva fecha de inicio (yyyy-mm-dd): ");
-                String fechaInicioStr = scanner.nextLine();
-                try {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                    Date nuevaFechaInicio = dateFormat.parse(fechaInicioStr);
-                    reserva.setFechaInicio(nuevaFechaInicio);
-                } catch (ParseException e) {
-                    System.out.println("Fecha inválida.");
-                }
-            }
-
-
-            System.out.println("¿Desea modificar la fecha de fin? (S/N): ");
-            String respuestaFin = scanner.nextLine();
-            if (respuestaFin.equalsIgnoreCase("S")) {
-                System.out.println("Ingrese la nueva fecha de fin (yyyy-mm-dd): ");
-                String fechaFinStr = scanner.nextLine();
-                try {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                    Date nuevaFechaFin = dateFormat.parse(fechaFinStr);
-                    reserva.setFechaFin(nuevaFechaFin);
-                } catch (ParseException e) {
-                    System.out.println("Fecha inválida.");
-                }
-            }
-
-            System.out.println("¿Desea modificar la cantidad de personas? (S/N): ");
-            String respuestaCantidadPersonas = scanner.nextLine();
-            if (respuestaCantidadPersonas.equalsIgnoreCase("S")) {
-                System.out.println("Ingrese la nueva cantidad de personas: ");
-                int nuevaCantidadPersonas = scanner.nextInt();
-                reserva.setCantidadPersonas(nuevaCantidadPersonas);
-            }
-
-            System.out.println("¿Desea modificar las observaciones? (S/N): ");
-            scanner.nextLine(); // Consumir salto de línea pendiente
-            String respuestaObservaciones = scanner.nextLine();
-            if (respuestaObservaciones.equalsIgnoreCase("S")) {
-                System.out.println("Ingrese las nuevas observaciones: ");
-                String nuevasObservaciones = scanner.nextLine();
-                reserva.setObservaciones(nuevasObservaciones);
-            }
-
-            boolean success = reservasController.modificarReserva(reserva);
-
-            if (success) {
-                System.out.println("Reserva modificada correctamente.");
-            } else {
-                System.out.println("Error al modificar la reserva.");
-            }
-        } else {
-            System.out.println("Reserva no encontrada.");
         }
     }
 

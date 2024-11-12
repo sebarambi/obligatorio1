@@ -26,10 +26,6 @@ public class ReservasController {
         return reservasDAO.getReservasByIdHuesped(idHuesped);
     }
 
-    public boolean modificarReserva(Reservas reserva) {
-        return reservasDAO.modificarReserva(reserva);
-    }
-
     public boolean eliminarReserva(int idReserva) {
         Reservas reserva = obtenerReservaPorId(idReserva);
 

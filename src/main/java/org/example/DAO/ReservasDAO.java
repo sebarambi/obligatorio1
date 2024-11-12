@@ -39,21 +39,6 @@ public class ReservasDAO {
         return connectionDAO.executeUpdate(query, idReserva);
     }
 
-    public boolean modificarReserva(Reservas reserva) {
-        String query = "UPDATE Reservas SET fechaInicio = ?, fechaFin = ?, " +
-                "cantidadPersonas = ?, observaciones = ?, idHuesped = ? " +
-                "WHERE idReserva = ?";
-
-        return connectionDAO.executeUpdate(query,
-                reserva.getFechaInicio(),
-                reserva.getFechaFin(),
-                reserva.getCantidadPersonas(),
-                reserva.getObservaciones(),
-                reserva.getHuesped().getIdHuesped(),
-                reserva.getIdReserva()
-        );
-    }
-
 
     public Reservas getReservaById(int idReserva) {
         String query = "SELECT r.idReserva, r.idHuesped, r.fechaInicio, r.fechaFin, r.cantidadPersonas, r.observaciones, r.fechaReserva " +
