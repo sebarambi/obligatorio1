@@ -10,10 +10,11 @@ public class Reservas {
     private Huesped huesped;
     private Date fechaInicio;
     private Date fechaFin;
-    private List<Habitacion> habitacionList;
     private int cantidadPersonas;
     private String observaciones;
     private Date fechaReserva;
+    private Habitacion habitacion;
+    private int precioTotal;
 
 
     //Getters and Setters
@@ -49,14 +50,6 @@ public class Reservas {
         this.fechaFin = fechaFin;
     }
 
-    public List<Habitacion> getHabitacionList() {
-        return habitacionList;
-    }
-
-    public void setHabitacionList(List<Habitacion> habitacionList) {
-        this.habitacionList = habitacionList;
-    }
-
     public int getCantidadPersonas() {
         return cantidadPersonas;
     }
@@ -81,25 +74,58 @@ public class Reservas {
         this.fechaReserva = fechaReserva;
     }
 
-    //Constructor
+    public Habitacion getHabitacion() {
+        return habitacion;
+    }
+
+    public void setHabitacion(Habitacion habitacion) {
+        this.habitacion = habitacion;
+    }
+
+    public int getPrecioTotal() {
+        return precioTotal;
+    }
+
+    public void setPrecioTotal(int precioTotal) {
+        this.precioTotal = precioTotal;
+    }
+//Constructor
 
 
-    public Reservas(Huesped huesped, Date fechaInicio, Date fechaFin, int cantidadPersonas, String observaciones) {
+    public Reservas(Huesped huesped, Date fechaInicio, Date fechaFin, int cantidadPersonas, String observaciones, Habitacion habitacion) {
         this.huesped = huesped;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.cantidadPersonas = cantidadPersonas;
         this.observaciones = observaciones;
         this.fechaReserva = new Date();
+        this.habitacion = habitacion;
+        this.precioTotal = calcularPrecioTotal();
     }
 
-    public Reservas(int idReserva, Huesped huesped, Date fechaInicio, Date fechaFin, int cantidadPersonas, String observaciones, Date fechaReserva) {
+    public Reservas(int idReserva, Huesped huesped, Habitacion habitacion, Date fechaInicio, Date fechaFin, int cantidadPersonas, String observaciones, int precioTotal, Date fechaReserva) {
         this.idReserva = idReserva;
         this.huesped = huesped;
+        this.habitacion = habitacion;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.cantidadPersonas = cantidadPersonas;
         this.observaciones = observaciones;
+        this.precioTotal = precioTotal;
         this.fechaReserva = fechaReserva;
+    }
+
+
+    //Metodos
+    public int calcularDiasEstancia() {
+        long diferenciaMillis = fechaFin.getTime() - fechaInicio.getTime();
+
+        return (int) (diferenciaMillis / (1000 * 60 * 60 * 24)); // 1000ms * 60s * 60m * 24h
+    }
+
+    private int calcularPrecioTotal() {
+        int diasEstancia = calcularDiasEstancia();
+        int montoTarifa = this.habitacion.getTipoHabitacion().getTarifa().getMonto();
+        return diasEstancia * montoTarifa;
     }
 }

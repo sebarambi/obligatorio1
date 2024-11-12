@@ -34,7 +34,7 @@ public class ReservasView {
 
             System.out.println("Menú de Reservas:");
             System.out.println("1. Reserva de habitaciones.");
-            System.out.println("3. Eliminar reservas.");
+            System.out.println("2. Eliminar reservas.");
             System.out.println("0. Salir.");
             System.out.print("Seleccione una opción: ");
 
@@ -136,7 +136,7 @@ public class ReservasView {
             int cantidadPersonas = scanner.nextInt();
 
             System.out.println("Ingresar observaciones para la reserva: ");
-            String descripciones = scanner.nextLine();
+            String observaciones = scanner.nextLine();
 
             if (cantidadPersonas > habitacionSeleccionada.getCapacidadCamas()) {
                 System.out.println("La cantidad de personas excede la capacidad de Camas de la habitación seleccionada.");
@@ -146,7 +146,7 @@ public class ReservasView {
                 return;
             }
 
-            Reservas reserva = new Reservas(huespedSeleccionado, fechaInicio, fechaFin, cantidadPersonas, descripciones);
+            Reservas reserva = new Reservas(huespedSeleccionado, fechaInicio, fechaFin, cantidadPersonas, observaciones, habitacionSeleccionada);
             boolean reservaInserted = reservasController.insertarReserva(reserva);
 
             if (reservaInserted) {

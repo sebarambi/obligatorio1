@@ -1,7 +1,9 @@
 package org.example.DAO;
 
+import org.example.controller.HabitacionController;
 import org.example.controller.HuespedController;
 import org.example.controller.ReservasController;
+import org.example.model.Habitacion;
 import org.example.model.Huesped;
 import org.example.model.Reservas;
 
@@ -15,24 +17,31 @@ public class ReservasDAO {
     private ConnectionDAO connectionDAO;
 
     private HuespedController huespedController;
+    private HabitacionController habitacionController;
 
 
     public ReservasDAO() {
         this.connectionDAO = new ConnectionDAO();
         this.huespedController = new HuespedController();
+        this.habitacionController = new HabitacionController();
     }
 
     public boolean insertReserva(Reservas reserva) {
-        String query = "INSERT INTO Reservas (idHuesped, fechaInicio, fechaFin, cantidadPersonas) VALUES (?,?,?,?)";
+        String query = "INSERT INTO Reservas (idHuesped, fechaInicio,  fechaFin, cantidadPersonas, observaciones, fechaReserva,idHabitacion ,precioTotal) VALUES (?,?,?,?,?,?,?,?)";
 
         return connectionDAO.executeUpdate(query,
                 reserva.getHuesped().getIdHuesped(),
                 reserva.getFechaInicio(),
                 reserva.getFechaFin(),
-                reserva.getCantidadPersonas()
-
+                reserva.getCantidadPersonas(),
+                reserva.getObservaciones(),
+                reserva.getFechaReserva(),
+                reserva.getHabitacion().getIdHabitacion(),
+                reserva.getPrecioTotal()
         );
     }
+
+
     public boolean eliminarReserva(int idReserva) {
         String query = "DELETE FROM Reservas WHERE idReserva = ?";
 
@@ -41,10 +50,9 @@ public class ReservasDAO {
 
 
     public Reservas getReservaById(int idReserva) {
-        String query = "SELECT r.idReserva, r.idHuesped, r.fechaInicio, r.fechaFin, r.cantidadPersonas, r.observaciones, r.fechaReserva " +
+        String query = "SELECT r.idReserva, r.idHuesped, r.idHabitacion, r.fechaInicio, r.fechaFin, r.cantidadPersonas, r.observaciones, r.precioTotal, r.fechaReserva " +
                 "FROM Reservas r " +
                 "WHERE r.idReserva = ?";
-
 
         Reservas reserva = null;
 
@@ -54,15 +62,18 @@ public class ReservasDAO {
             if (resultSet.next()) {
                 int id = resultSet.getInt("idReserva");
                 int idHuesped = resultSet.getInt("idHuesped");
+                int idHabitacion = resultSet.getInt("idHabitacion");
                 Date fechaInicio = resultSet.getDate("fechaInicio");
                 Date fechaFin = resultSet.getDate("fechaFin");
                 int cantidadPersonas = resultSet.getInt("cantidadPersonas");
                 String observaciones = resultSet.getString("observaciones");
+                int precioTotal = resultSet.getInt("precioTotal");
                 Date fechaReserva = resultSet.getDate("fechaReserva");
 
                 Huesped huesped = huespedController.getHuespedById(idHuesped);
+                Habitacion habitacion = habitacionController.getHabitacionById(idHabitacion);
 
-                reserva = new Reservas(huesped, fechaInicio, fechaFin, cantidadPersonas, observaciones);
+                reserva = new Reservas(id, huesped, habitacion, fechaInicio, fechaFin, cantidadPersonas, observaciones, precioTotal, fechaReserva);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -71,9 +82,10 @@ public class ReservasDAO {
         return reserva;
     }
 
+
     public List<Reservas> getReservasByIdHuesped(int idHuesped) {
-        String query = "SELECT r.idReserva, r.idHuesped, r.fechaInicio, r.fechaFin, " +
-                "r.cantidadPersonas, r.observaciones, r.fechaReserva " +
+        String query = "SELECT r.idReserva, r.idHuesped, r.idHabitacion, r.fechaInicio, r.fechaFin, " +
+                "r.cantidadPersonas, r.observaciones, r.precioTotal, r.fechaReserva " +
                 "FROM Reservas r " +
                 "WHERE r.idHuesped = ?";
 
@@ -84,15 +96,23 @@ public class ReservasDAO {
 
             while (resultSet.next()) {
                 int idReserva = resultSet.getInt("idReserva");
+                int idHabitacion = resultSet.getInt("idHabitacion");
                 Date fechaInicio = resultSet.getDate("fechaInicio");
                 Date fechaFin = resultSet.getDate("fechaFin");
                 int cantidadPersonas = resultSet.getInt("cantidadPersonas");
                 String observaciones = resultSet.getString("observaciones");
+                int precioTotal = resultSet.getInt("precioTotal");
                 Date fechaReserva = resultSet.getDate("fechaReserva");
 
+                // Obtener el Huesped
                 Huesped huesped = huespedController.getHuespedById(idHuesped);
 
-                Reservas reserva = new Reservas(idReserva,huesped,fechaInicio,fechaFin,cantidadPersonas,observaciones,fechaReserva);
+                // Obtener la Habitacion
+                Habitacion habitacion = habitacionController.getHabitacionById(idHabitacion);
+
+                // Crear la reserva con todos los datos
+                Reservas reserva = new Reservas(idReserva, huesped, habitacion, fechaInicio, fechaFin,
+                        cantidadPersonas, observaciones, precioTotal, fechaReserva);
                 reservasList.add(reserva);
             }
         } catch (SQLException ex) {
